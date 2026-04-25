@@ -1,0 +1,60 @@
+name: Atualizar índice de peças
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pecas/**'
+  workflow_dispatch:
+
+jobs:
+  atualizar-indice:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gerar lista de peças
+        run: |
+          cd pecas
+          # Lista todos os arquivos .md, remove a extensão, formata como array JS
+          PECAS=$(ls *.md 2>/dev/null | sed 's/\.md$//' | sed "s/.*/  '&',/" | tr '\n' '\n')
+          cd ..
+
+          # Atualiza o site.js com a nova lista
+          python3 << 'PYEOF'
+          import os, re
+
+          # Lê todas as peças
+          pecas = sorted([f.replace('.md','') for f in os.listdir('pecas') if f.endswith('.md')])
+
+          # Lê o site.js
+          with open('site.js', 'r', encoding='utf-8') as f:
+              content = f.read()
+
+          # Gera nova lista
+          lista = ',\n'.join([f"  '{p}'" for p in pecas])
+          novo_bloco = f"const PECAS_INDEX = [\n{lista},\n];"
+
+          # Substitui no arquivo
+          content = re.sub(
+              r'const PECAS_INDEX = \[[^\]]*\];',
+              novo_bloco,
+              content,
+              flags=re.DOTALL
+          )
+
+          with open('site.js', 'w', encoding='utf-8') as f:
+              f.write(content)
+
+          print(f"Índice atualizado com {len(pecas)} peças")
+          PYEOF
+
+      - name: Commit das mudanças
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add site.js
+          git diff --staged --quiet || git commit -m "Auto-atualizar índice de peças"
+          git push
