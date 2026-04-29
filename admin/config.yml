@@ -59,6 +59,24 @@ collections:
       - {label: "Ordem do Destaque", name: "ordem_destaque", widget: "number", required: false, default: 0, hint: "Quanto MENOR o número, mais à frente aparece. Use 1, 2, 3..."}
       - {label: "Vendida", name: "vendida", widget: "boolean", default: false, hint: "Quando vendida, aparece com selo 'Vendida' e some o botão de WhatsApp"}
 
+  - name: "jatamala"
+    label: "Jatamala — Peças"
+    label_singular: "Peça Jatamala"
+    folder: "jatamala"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{titulo}}{{#if vendida}} (Vendida){{/if}}"
+    fields:
+      - {label: "Foto da Peça", name: "foto", widget: "image", required: true}
+      - {label: "Nome da Peça", name: "titulo", widget: "string", required: true}
+      - {label: "Tipo de Madeira", name: "tipo_madeira", widget: "string", required: false}
+      - {label: "Descrição", name: "descricao", widget: "text", required: false}
+      - {label: "Preço (R$)", name: "preco", widget: "number", required: false, value_type: "float", min: 0}
+      - {label: "Vendida", name: "vendida", widget: "boolean", default: false}
+
   - name: "config"
     label: "Configurações Gerais"
     files:
