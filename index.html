@@ -214,6 +214,16 @@
   .piece-modal__sold-note{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--bone-dim);text-align:center;padding:10px}
   .piece{cursor:pointer}
 
+  .ver-mais-wrap{text-align:center;padding:40px 0 10px}
+  .ver-mais-btn{display:inline-flex;align-items:center;gap:12px;padding:14px 32px;font-size:11px;letter-spacing:.36em;text-transform:uppercase;font-weight:500;border:1px solid var(--rule);color:var(--bone-dim);transition:all .4s var(--ease)}
+  .ver-mais-btn:hover{border-color:var(--gold);color:var(--gold)}
+  .ver-mais-btn svg{transition:transform .3s var(--ease)}
+  .ver-mais-btn:hover svg{transform:translateX(4px)}
+
+  /* Jatamala nav link */
+  .nav__links a.nav__jatamala{color:var(--gold);opacity:1}
+  .nav__links a.nav__jatamala::after{background:var(--gold)}
+
   @media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 </style>
 </head>
@@ -225,6 +235,7 @@
     <a href="#colecao">Coleção</a>
     <a href="#artista">O Artista</a>
     <a href="#contato">Contato</a>
+    <a href="jatamala.html" class="nav__jatamala">Jatamala</a>
   </div>
 </nav>
 
