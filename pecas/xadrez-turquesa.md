@@ -7,6 +7,6 @@ descricao: Tabuleiro de xadrez em corte transversal com casas em resina perolada
   turquesa. Peça funcional e decorativa.
 preco: 449
 destaque: true
-ordem_destaque: 0
+ordem_destaque: -3
 vendida: false
 ---
