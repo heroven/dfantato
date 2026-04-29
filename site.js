@@ -11,6 +11,7 @@ const PECAS_INDEX = [
   'crina-ao-vento',
   'elm-ibex-001',
   'ibex-aguas',
+  'map-destaque-false-ordem_destaque-0-vendida-true-foto-images-uploads-whatsapp-image-2026-04-12-at-21-01-10-jpeg-titulo-dfghj-categoria-obras-decorativas-tipo_madeira-asdfghj-descricao-zxcvbn',
   'tabua-charcuterie',
   'travessa-lua',
   'travessa-onda',
