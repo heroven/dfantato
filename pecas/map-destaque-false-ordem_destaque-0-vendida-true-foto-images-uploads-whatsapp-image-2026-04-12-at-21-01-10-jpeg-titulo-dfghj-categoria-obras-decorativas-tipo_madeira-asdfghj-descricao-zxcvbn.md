@@ -5,6 +5,6 @@ categoria: Obras Decorativas
 tipo_madeira: asdfghj
 descricao: zxcvbn
 destaque: false
-ordem_destaque: 0
+ordem_destaque: 1
 vendida: true
 ---
