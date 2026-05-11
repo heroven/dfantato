@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>Admin · D'Fantato</title>
+<link rel="icon" type="image/png" href="/images/logo-gold.png"/>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior:none}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;background:#0f0d0c;color:#ede3d0;-webkit-font-smoothing:antialiased;line-height:1.5}
+img{max-width:100%;display:block}
+button,a{cursor:pointer}
+a{color:inherit;text-decoration:none}
+input,textarea,select{font:inherit;color:inherit;-webkit-appearance:none;appearance:none}
+
+:root{
+  --bg:#0f0d0c;--bg2:#181513;--bg3:#221e1b;--bg4:#2e2824;
+  --bone:#ede3d0;--dim:#9a8f82;--faint:#5a524b;
+  --gold:#c9a66b;--gold2:#e4c78c;
+  --green:#5c9c7a;--red:#d17564;
+  --rule:rgba(201,166,107,0.15);
+  --r:12px;--r-sm:8px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+}
+
+/* ============ TELAS ============ */
+.tela{display:none;flex-direction:column;min-height:100vh;min-height:100dvh}
+.tela.ativa{display:flex}
+
+/* ============ TELA LOGIN ============ */
+#tela-login{
+  align-items:center;justify-content:center;
+  padding:40px 24px;
+  background:radial-gradient(ellipse at center,#1a1410 0%,var(--bg) 70%);
+}
+.login-box{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:28px}
+.login-logo{width:180px;filter:invert(1) sepia(1) saturate(.5) brightness(1.3)}
+.login-title{font-size:24px;font-weight:700;text-align:center}
+.login-sub{font-size:14px;color:var(--dim);text-align:center;line-height:1.6;margin-top:-16px}
+
+.login-btns{width:100%;display:flex;flex-direction:column;gap:12px}
+.btn-google{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  width:100%;padding:17px 24px;
+  background:#fff;color:#1f1f1f;
+  border:none;border-radius:var(--r-sm);
+  font-size:16px;font-weight:600;cursor:pointer;
+  transition:opacity .2s;
+}
+.btn-google:active{opacity:.8}
+.btn-google .g-icon{width:22px;height:22px;flex-shrink:0}
+.login-ou{display:flex;align-items:center;gap:12px;color:var(--faint);font-size:13px}
+.login-ou::before,.login-ou::after{content:'';flex:1;height:1px;background:var(--rule)}
+.btn-email{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;padding:17px 24px;
+  background:var(--bg2);color:var(--bone);
+  border:1.5px solid var(--rule);border-radius:var(--r-sm);
+  font-size:15px;font-weight:600;cursor:pointer;
+  transition:all .2s;
+}
+.btn-email:active{background:var(--bg3)}
+.btn-email svg{width:20px;height:20px;flex-shrink:0}
+
+.login-user-box{
+  width:100%;background:var(--bg2);border:1px solid var(--rule);
+  border-radius:var(--r);padding:18px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.login-user-info{display:flex;align-items:center;gap:14px}
+.login-avatar{
+  width:46px;height:46px;border-radius:50%;
+  background:var(--bg3);border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:700;color:var(--gold);
+  overflow:hidden;flex-shrink:0;
+}
+.login-avatar img{width:100%;height:100%;object-fit:cover}
+.login-user-name{font-size:16px;font-weight:600}
+.login-user-email{font-size:13px;color:var(--dim)}
+.btn-entrar{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:16px;
+  background:var(--gold);color:#1a1208;
+  border:none;border-radius:var(--r-sm);
+  font-size:16px;font-weight:700;cursor:pointer;
+  transition:background .2s;
+}
+.btn-entrar:active{background:var(--gold2)}
+.btn-entrar svg{width:20px;height:20px}
+.btn-sair{
+  font-size:13px;color:var(--dim);text-align:center;
+  background:none;border:none;cursor:pointer;padding:4px;
+}
+
+/* ============ TELA REPO ============ */
+#tela-repo{
+  align-items:center;justify-content:flex-start;
+  overflow-y:auto;padding:0;
+  background:var(--bg);
+}
+.repo-inner{width:100%;max-width:480px;margin:0 auto;padding:60px 24px 40px}
+.repo-inner h2{font-size:22px;font-weight:700;text-align:center;margin-bottom:8px}
+.repo-inner p{font-size:14px;color:var(--dim);text-align:center;line-height:1.6;margin-bottom:32px}
+.repo-step{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.repo-step-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.field input{width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--gold)}
+.field small{display:block;margin-top:6px;font-size:12px;color:var(--dim);line-height:1.5}
+
+/* ============ HOME ============ */
+#tela-home{background:var(--bg);overflow:hidden}
+.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;padding-top:calc(14px + var(--safe-top));background:var(--bg2);border-bottom:1px solid var(--rule)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-brand img{height:26px;filter:invert(1) sepia(1) saturate(.5) brightness(1.3)}
+.topbar-label{font-size:12px;font-weight:600;color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.topbar-av{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1.5px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--gold);overflow:hidden}
+.topbar-av img{width:100%;height:100%;object-fit:cover}
+.icon-btn{width:36px;height:36px;background:var(--bg3);border-radius:var(--r-sm);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;color:var(--dim);cursor:pointer}
+.icon-btn:active{background:var(--bg4)}
+.icon-btn svg{width:18px;height:18px}
+.home-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px calc(20px + var(--safe-bottom))}
+.home-greeting h1{font-size:20px;font-weight:700;margin-bottom:4px}
+.home-greeting p{font-size:14px;color:var(--dim);margin-bottom:24px}
+.col-card{background:var(--bg2);border:1.5px solid var(--rule);border-radius:var(--r);padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:16px;cursor:pointer}
+.col-card:active{background:var(--bg3)}
+.col-icon{width:52px;height:52px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:rgba(201,166,107,.1)}
+.col-info{flex:1;min-width:0}
+.col-info h3{font-size:16px;font-weight:600;margin-bottom:3px}
+.col-info p{font-size:13px;color:var(--dim)}
+.col-arrow svg{width:20px;height:20px;color:var(--faint)}
+
+/* ============ LISTA ============ */
+#tela-lista{background:var(--bg);overflow:hidden}
+.header{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:14px 16px;padding-top:calc(12px + var(--safe-top));background:var(--bg2);border-bottom:1px solid var(--rule)}
+.back-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);background:var(--bg3);flex-shrink:0;cursor:pointer}
+.back-btn:active{background:var(--bg4)}
+.back-btn svg{width:20px;height:20px}
+.header-title{flex:1;font-size:17px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.add-btn{width:40px;height:40px;background:var(--gold);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.add-btn:active{opacity:.8}
+.add-btn svg{width:22px;height:22px;color:#1a1208}
+.list-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px calc(16px + var(--safe-bottom))}
+.empty-state{text-align:center;padding:60px 20px;color:var(--dim)}
+.empty-state svg{width:52px;height:52px;opacity:.25;margin:0 auto 16px}
+.empty-state h3{font-size:18px;font-weight:600;color:var(--bone);margin-bottom:8px}
+
+.piece-row{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r);margin-bottom:10px;overflow:hidden;display:flex}
+.piece-thumb{width:72px;flex-shrink:0;background:var(--bg3)}
+.piece-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.piece-body{flex:1;padding:12px 14px;min-width:0;cursor:pointer}
+.piece-body:active{background:var(--bg3)}
+.piece-name{font-size:15px;font-weight:600;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.piece-meta{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.badge-ok{background:rgba(92,156,122,.18);color:var(--green)}
+.badge-sold{background:rgba(90,82,75,.35);color:var(--dim)}
+.badge-star{background:rgba(201,166,107,.2);color:var(--gold)}
+.piece-del{width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(209,117,100,.07);border-left:1px solid var(--rule);cursor:pointer}
+.piece-del:active{background:rgba(209,117,100,.2)}
+.piece-del svg{width:20px;height:20px;color:var(--red)}
+
+/* ============ EDIÇÃO ============ */
+#tela-edit{background:var(--bg);overflow:hidden}
+.edit-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px;padding-bottom:calc(90px + var(--safe-bottom))}
+
+.foto-box{width:100%;aspect-ratio:4/3;border-radius:var(--r);border:2px dashed var(--rule);overflow:hidden;position:relative;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;margin-bottom:20px;transition:border-color .2s}
+.foto-box.tem-foto{border-style:solid;border-color:rgba(201,166,107,.4)}
+.foto-box img.prev{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.foto-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.foto-box.tem-foto .foto-overlay{display:flex}
+.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--dim);pointer-events:none}
+.foto-placeholder svg{width:38px;height:38px;color:var(--gold)}
+.foto-placeholder span{font-size:14px;font-weight:500}
+.foto-box input{display:none}
+
+.fsec{margin-bottom:20px}
+.fsec-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.ffield{margin-bottom:14px}
+.ffield label{display:block;font-size:12px;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.ffield input,.ffield textarea{width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none;transition:border-color .2s}
+.ffield input:focus,.ffield textarea:focus{border-color:var(--gold)}
+.ffield textarea{min-height:80px;resize:none;line-height:1.5}
+.sel-wrap{position:relative}
+.sel-wrap select{width:100%;padding:14px 44px 14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none;cursor:pointer;-webkit-appearance:none}
+.sel-wrap select:focus{border-color:var(--gold)}
+.sel-wrap::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--dim);pointer-events:none}
+
+.tog-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-sm);margin-bottom:10px;cursor:pointer}
+.tog-row:active{background:var(--bg3)}
+.tog-left{flex:1}
+.tog-label{font-size:15px;font-weight:500}
+.tog-sub{font-size:12px;color:var(--dim);margin-top:2px}
+.tog-sw{width:50px;height:28px;background:var(--bg4);border-radius:14px;position:relative;transition:background .25s;flex-shrink:0;border:1.5px solid var(--rule)}
+.tog-sw::after{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:var(--dim);border-radius:50%;transition:all .25s}
+.tog-row.on .tog-sw{background:rgba(201,166,107,.25);border-color:var(--gold)}
+.tog-row.on .tog-sw::after{left:calc(100% - 23px);background:var(--gold)}
+
+/* SALVAR FIXO */
+.float-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 16px;padding-bottom:calc(10px + var(--safe-bottom));background:rgba(24,21,19,.95);border-top:1px solid var(--rule);z-index:50;display:flex;gap:10px;backdrop-filter:blur(8px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;font-size:15px;font-weight:600;border:none;border-radius:var(--r-sm);cursor:pointer;width:100%}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-primary{background:var(--gold);color:#1a1208}
+.btn-primary:active{background:var(--gold2)}
+.btn-ghost{background:transparent;color:var(--dim);border:1.5px solid var(--rule)}
+.btn-ghost:active{background:var(--bg3)}
+.btn-danger{background:rgba(209,117,100,.12);color:var(--red);border:1.5px solid rgba(209,117,100,.25)}
+.btn-danger:active{background:rgba(209,117,100,.22)}
+.btn-sm{padding:10px 14px;font-size:13px;max-width:100px}
+
+/* ============ UI HELPERS ============ */
+.spinner{width:24px;height:24px;border:2.5px solid rgba(201,166,107,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.loader-screen{position:fixed;inset:0;background:rgba(15,13,12,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:9000;backdrop-filter:blur(6px)}
+.loader-screen p{font-size:13px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.loader-screen .spinner{width:38px;height:38px;border-width:3px}
+
+.toast{position:fixed;top:calc(16px + var(--safe-top));left:50%;transform:translateX(-50%) translateY(-90px);background:var(--bg2);border:1.5px solid var(--gold);color:var(--bone);padding:12px 18px;border-radius:var(--r);font-size:14px;font-weight:500;z-index:9999;transition:transform .3s;white-space:nowrap;max-width:90vw;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.toast.err{border-color:var(--red);color:var(--red)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast svg{width:16px;height:16px;flex-shrink:0}
+
+.dialog-wrap{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:9998;display:flex;align-items:flex-end;backdrop-filter:blur(4px)}
+.dialog-box{background:var(--bg2);border-radius:var(--r) var(--r) 0 0;padding:28px 20px;padding-bottom:calc(28px + var(--safe-bottom));width:100%;max-width:500px;margin:0 auto;border-top:1.5px solid var(--rule)}
+.dialog-box h3{font-size:18px;font-weight:700;margin-bottom:8px;text-align:center}
+.dialog-box p{font-size:14px;color:var(--dim);text-align:center;margin-bottom:24px;line-height:1.6}
+.dialog-btns{display:flex;flex-direction:column;gap:10px}
+</style>
+</head>
+<body>
+
+<!-- ============ TELA 1: LOGIN ============ -->
+<div class="tela ativa" id="tela-login">
+  <div class="login-box">
+    <img class="login-logo" src="/images/logo-gold.png" alt="D'Fantato"/>
+    <div>
+      <div class="login-title">Painel Admin</div>
+      <div class="login-sub">Entre com sua conta Google ou e-mail cadastrado</div>
+    </div>
+
+    <!-- Estado: sem sessão → mostra botões -->
+    <div class="login-btns" id="div-login-btns">
+      <button class="btn-google" id="btn-google" onclick="abrirLogin()">
+        <svg class="g-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Entrar com Google
+      </button>
+      <div class="login-ou">ou</div>
+      <button class="btn-email" onclick="abrirLogin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        Entrar com E-mail
+      </button>
+    </div>
+
+    <!-- Estado: já tem sessão → mostra quem está logado -->
+    <div id="div-login-user" style="display:none;width:100%">
+      <div class="login-user-box">
+        <div class="login-user-info">
+          <div class="login-avatar" id="av-login"></div>
+          <div>
+            <div class="login-user-name" id="nome-login"></div>
+            <div class="login-user-email" id="email-login"></div>
+          </div>
+        </div>
+        <button class="btn-entrar" onclick="irParaAdmin()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+          Entrar no Admin
+        </button>
+        <button class="btn-sair" onclick="netlifyIdentity.logout()">Usar outra conta</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TELA 2: CONFIGURAR REPO ============ -->
+<div class="tela" id="tela-repo">
+  <div class="repo-inner">
+    <h2>Configurar Repositório</h2>
+    <p>Necessário uma única vez. É onde suas peças são salvas no GitHub.</p>
+
+    <div class="repo-step">
+      <div class="repo-step-title">Dados do GitHub</div>
+      <div class="field">
+        <label>Usuário GitHub</label>
+        <input id="rp-owner" type="text" placeholder="ex: gabrielfantato1"
+          autocapitalize="none" autocorrect="off" spellcheck="false"/>
+        <small>O nome de usuário da sua conta no GitHub (aparece na URL: github.com/<strong>usuario</strong>)</small>
+      </div>
+      <div class="field">
+        <label>Nome do Repositório</label>
+        <input id="rp-repo" type="text" placeholder="ex: dfantato-wood"
+          autocapitalize="none" autocorrect="off" spellcheck="false"/>
+        <small>O nome do repositório onde estão os arquivos do site</small>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="salvarRepo()" style="margin-top:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+      Salvar e Continuar
+    </button>
+    <button class="btn btn-ghost" onclick="netlifyIdentity.logout();mostrarTela('tela-login')" style="margin-top:10px;font-size:13px">
+      Sair e usar outra conta
+    </button>
+  </div>
+</div>
+
+<!-- ============ TELA 3: HOME ============ -->
+<div class="tela" id="tela-home">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <img src="/images/logo-gold.png" alt=""/>
+      <span class="topbar-label">Admin</span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-av" id="topbar-av"></div>
+      <div class="icon-btn" onclick="abrirConfig()" title="Configurações">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="icon-btn" onclick="confirmarLogout()" title="Sair">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="home-scroll">
+    <div class="home-greeting">
+      <h1 id="greeting"></h1>
+      <p>Escolha uma coleção para gerenciar</p>
+    </div>
+    <div id="col-list"></div>
+  </div>
+</div>
+
+<!-- ============ TELA 4: LISTA ============ -->
+<div class="tela" id="tela-lista">
+  <div class="header">
+    <div class="back-btn" onclick="mostrarTela('tela-home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </div>
+    <div class="header-title" id="lista-titulo"></div>
+    <div class="add-btn" onclick="novaPeca()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    </div>
+  </div>
+  <div class="list-scroll" id="lista-scroll"></div>
+</div>
+
+<!-- ============ TELA 5: EDIÇÃO ============ -->
+<div class="tela" id="tela-edit">
+  <div class="header">
+    <div class="back-btn" onclick="mostrarTela('tela-lista')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </div>
+    <div class="header-title" id="edit-titulo">Nova Peça</div>
+    <div style="width:40px"></div>
+  </div>
+
+  <div class="edit-scroll">
+    <!-- FOTO -->
+    <div class="foto-box" id="foto-box" onclick="document.getElementById('foto-input').click()">
+      <img class="prev" id="foto-prev" src="" style="display:none"/>
+      <div class="foto-overlay">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+        <span style="color:#fff;font-size:13px;font-weight:500">Trocar foto</span>
+      </div>
+      <div class="foto-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        <span>Toque para escolher a foto</span>
+      </div>
+      <input id="foto-input" type="file" accept="image/*" onchange="selecionarFoto(this)"/>
+    </div>
+
+    <div class="fsec">
+      <div class="fsec-title">Informações</div>
+      <div class="ffield">
+        <label>Nome da Peça *</label>
+        <input id="f-titulo" type="text" placeholder="Ex: Bowl Raízes" autocapitalize="words"/>
+      </div>
+      <div class="ffield" id="f-cat-wrap" style="display:none">
+        <label>Categoria *</label>
+        <div class="sel-wrap"><select id="f-categoria"></select></div>
+      </div>
+      <div class="ffield">
+        <label id="f-mat-label">Tipo de Madeira</label>
+        <input id="f-material" type="text" placeholder="Ex: Imbuia recuperada" autocapitalize="words"/>
+      </div>
+      <div class="ffield">
+        <label>Descrição</label>
+        <textarea id="f-descricao" placeholder="Conta a história da peça..." rows="3"></textarea>
+      </div>
+      <div class="ffield">
+        <label>Preço (R$) — vazio = sob consulta</label>
+        <input id="f-preco" type="number" inputmode="decimal" placeholder="0,00" min="0" step="0.01"/>
+      </div>
+    </div>
+
+    <div class="fsec">
+      <div class="fsec-title">Configurações</div>
+      <div class="tog-row on" id="tog-disponivel" onclick="togRow('tog-disponivel')">
+        <div class="tog-left">
+          <div class="tog-label">Disponível para venda</div>
+          <div class="tog-sub">Desative quando a peça for vendida</div>
+        </div>
+        <div class="tog-sw"></div>
+      </div>
+      <div class="tog-row" id="tog-destaque" onclick="togRow('tog-destaque')" style="display:none">
+        <div class="tog-left">
+          <div class="tog-label">⭐ Em Destaque</div>
+          <div class="tog-sub">Aparece primeiro no site</div>
+        </div>
+        <div class="tog-sw"></div>
+      </div>
+      <div class="ffield" id="f-ordem-wrap" style="display:none">
+        <label>Ordem do destaque (1 = primeiro)</label>
+        <input id="f-ordem" type="number" inputmode="numeric" placeholder="1" min="1"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- SALVAR SEMPRE VISÍVEL -->
+  <div class="float-bar">
+    <button class="btn btn-danger btn-sm" id="btn-del" onclick="confirmarDelete()" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+      Excluir
+    </button>
+    <button class="btn btn-primary" onclick="salvarPeca()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+      Salvar Peça
+    </button>
+  </div>
+</div>
+
+
+<!-- ============ TELA CONFIG ============ -->
+<div class="tela" id="tela-config">
+  <div class="header">
+    <div class="back-btn" onclick="mostrarTela('tela-home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </div>
+    <div class="header-title">Configurações</div>
+    <div style="width:40px"></div>
+  </div>
+  <div class="list-scroll">
+
+    <div style="margin-bottom:20px">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">GitHub — Token de Acesso</div>
+      <p style="font-size:14px;color:var(--dim);line-height:1.6;margin-bottom:16px">
+        O token conecta o admin ao seu repositório GitHub. É gerado uma única vez.
+      </p>
+      <div class="ffield">
+        <label>Personal Access Token</label>
+        <input id="cfg-pat" type="password" placeholder="ghp_xxxxxxxxxxxx"
+          autocapitalize="none" autocorrect="off" spellcheck="false"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+        <small style="display:block;margin-top:8px;font-size:12px;color:var(--dim);line-height:1.6">
+          Gere em: <strong>github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</strong><br/>
+          Marque a permissão <strong>repo</strong> e clique em "Generate token".
+        </small>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">Repositório GitHub</div>
+      <div class="ffield">
+        <label>Usuário GitHub</label>
+        <input id="cfg-owner" type="text" placeholder="ex: gabrielfantato1"
+          autocapitalize="none" autocorrect="off" spellcheck="false"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+      <div class="ffield">
+        <label>Nome do Repositório</label>
+        <input id="cfg-repo" type="text" placeholder="ex: dfantato-wood"
+          autocapitalize="none" autocorrect="off" spellcheck="false"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="salvarConfig()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+      Salvar Configurações
+    </button>
+
+    <!-- CONFIGURAÇÕES DO SITE -->
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">D'Fantato Wood — Contato</div>
+      <p style="font-size:12px;color:var(--faint);margin-bottom:14px;line-height:1.5">Aparece nos botões do site e nas mensagens de interesse das peças</p>
+      <div class="ffield">
+        <label>WhatsApp (com DDI+DDD, só números)</label>
+        <input id="sc-whats" type="tel" inputmode="numeric" placeholder="5548988746307"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+        <small style="display:block;margin-top:6px;font-size:12px;color:var(--dim)">Ex: 55 (Brasil) + 48 (DDD) + número = 5548988746307</small>
+      </div>
+      <div class="ffield">
+        <label>Instagram (link completo)</label>
+        <input id="sc-insta" type="url" inputmode="url" placeholder="https://www.instagram.com/__dfantato/"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+      <div class="ffield">
+        <label>Mensagem de interesse nas peças</label>
+        <input id="sc-msg" type="text" placeholder="Olá! Tenho interesse na peça *{nome}*..."
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+        <small style="display:block;margin-top:6px;font-size:12px;color:var(--dim)">Use <strong>{nome}</strong> para inserir o nome da peça automaticamente</small>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">Alma em Contas — Contato</div>
+      <p style="font-size:12px;color:var(--faint);margin-bottom:14px;line-height:1.5">Pode ser diferente do D'Fantato Wood</p>
+      <div class="ffield">
+        <label>WhatsApp da Alma em Contas</label>
+        <input id="sc-alma-whats" type="tel" inputmode="numeric" placeholder="5548988746307"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+      <div class="ffield">
+        <label>Instagram da Alma em Contas</label>
+        <input id="sc-alma-insta" type="url" inputmode="url" placeholder="https://www.instagram.com/..."
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:14px">Geral</div>
+      <div class="ffield">
+        <label>Cidade / Estado</label>
+        <input id="sc-cidade" type="text" placeholder="Tubarão / SC" autocapitalize="words"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="salvarSiteConfig()" style="margin-top:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+      Salvar Informações do Site
+    </button>
+
+    <!-- CONTA -->
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px">Conta</div>
+      <button class="btn btn-ghost" onclick="confirmarLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sair
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- UI HELPERS -->
+<div class="toast" id="toast"></div>
+<div class="loader-screen" id="loader" style="display:none">
+  <div class="spinner"></div>
+  <p id="loader-msg">Aguarde...</p>
+</div>
+<div class="dialog-wrap" id="dialog" style="display:none" onclick="if(event.target===this)fecharDialog()">
+  <div class="dialog-box">
+    <h3 id="d-title"></h3>
+    <p id="d-msg"></p>
+    <div class="dialog-btns">
+      <button class="btn btn-danger" id="d-ok">Confirmar</button>
+      <button class="btn btn-ghost" onclick="fecharDialog()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// COLEÇÕES
+// ============================================================
+const COLS = [
+  {id:'pecas',    nome:"D'Fantato Wood",     sub:'Peças em madeira nobre recuperada', icon:'🪵', pasta:'pecas',    cats:['Esculturas','Obras Decorativas','Bowls e Travessas','Tábuas e Acessórios'], campo:'tipo_madeira', label:'Tipo de Madeira',  dest:true},
+  {id:'japamala', nome:'Japamala',            sub:'Malas de meditação — Alma em Contas', icon:'📿', pasta:'japamala', cats:null, campo:'material', label:'Material / Pedra', dest:false},
+  {id:'alma',     nome:'Pulseiras & Colares', sub:'Coleção Alma em Contas',             icon:'✨', pasta:'alma',     cats:null, campo:'material', label:'Material / Pedra', dest:false},
+];
+
+// ============================================================
+// ESTADO
+// ============================================================
+let user = null;
+let col  = null;
+let pecas = [];
+let editSlug = null;
+let editSha  = null;
+let fotoB64  = null;
+let fotoNome = null;
+let ghOwner  = '';
+let ghRepo   = '';
+
+// ============================================================
+// NETLIFY IDENTITY
+// ============================================================
+netlifyIdentity.on('init', u => {
+  if (u) {
+    user = u;
+    mostrarUsuarioNoLogin(u);
+  }
+  // Sempre começa na tela de login — usuário decide quando entrar
+  mostrarTela('tela-login');
+});
+
+netlifyIdentity.on('login', u => {
+  user = u;
+  netlifyIdentity.close();
+  mostrarUsuarioNoLogin(u);
+  mostrarTela('tela-login'); // volta para login para mostrar o botão "Entrar no Admin"
+});
+
+netlifyIdentity.on('logout', () => {
+  user = null;
+  document.getElementById('div-login-user').style.display = 'none';
+  document.getElementById('div-login-btns').style.display = 'flex';
+  mostrarTela('tela-login');
+});
+
+netlifyIdentity.on('error', err => {
+  console.error(err);
+  showToast('Erro de autenticação: ' + err.message, 'err');
+});
+
+function abrirLogin() {
+  netlifyIdentity.open('login');
+}
+
+function mostrarUsuarioNoLogin(u) {
+  const nome = u.user_metadata?.full_name || u.email.split('@')[0];
+  const av = u.user_metadata?.avatar_url;
+
+  document.getElementById('div-login-btns').style.display = 'none';
+  document.getElementById('div-login-user').style.display = 'block';
+
+  const avEl = document.getElementById('av-login');
+  avEl.innerHTML = av ? `<img src="${av}"/>` : nome[0].toUpperCase();
+
+  document.getElementById('nome-login').textContent = nome;
+  document.getElementById('email-login').textContent = u.email;
+}
+
+function irParaAdmin() {
+  if (!user) { abrirLogin(); return; }
+  const saved = localStorage.getItem('df_repo');
+  const pat = localStorage.getItem('df_pat');
+  if (saved && pat) {
+    try { const s=JSON.parse(saved); if(s.o&&s.r){ghOwner=s.o;ghRepo=s.r;mostrarHome();return;} }
+    catch {}
+  }
+  // Sem repo: pede repo
+  if (!saved) { mostrarTela('tela-repo'); return; }
+  // Tem repo mas não tem PAT: vai direto pra config
+  try {
+    const s=JSON.parse(saved);
+    if(s.o&&s.r){ ghOwner=s.o; ghRepo=s.r; }
+  } catch {}
+  preencherConfig();
+  mostrarTela('tela-config');
+  showToast('Configure o token do GitHub para continuar');
+}
+
+function preencherConfig() {
+  document.getElementById('cfg-owner').value = ghOwner || '';
+  document.getElementById('cfg-repo').value = ghRepo || '';
+  const pat = localStorage.getItem('df_pat') || '';
+  document.getElementById('cfg-pat').value = pat ? '••••••••••••••••' : '';
+}
+
+function salvarRepo() {
+  const o = document.getElementById('rp-owner').value.trim();
+  const r = document.getElementById('rp-repo').value.trim();
+  if (!o) { showToast('Digite seu usuário GitHub', 'err'); document.getElementById('rp-owner').focus(); return; }
+  if (!r) { showToast('Digite o nome do repositório', 'err'); document.getElementById('rp-repo').focus(); return; }
+  ghOwner = o; ghRepo = r;
+  localStorage.setItem('df_repo', JSON.stringify({o, r}));
+  // Se não tem token ainda, vai para config
+  const pat = localStorage.getItem('df_pat');
+  if (!pat) {
+    preencherConfig();
+    mostrarTela('tela-config');
+    showToast('Agora configure o token do GitHub');
+  } else {
+    mostrarHome();
+  }
+}
+
+function preencherConfig() {
+  document.getElementById('cfg-owner').value = ghOwner || '';
+  document.getElementById('cfg-repo').value = ghRepo || '';
+  const pat = localStorage.getItem('df_pat') || '';
+  document.getElementById('cfg-pat').value = pat ? '••••••••••••••••' : '';
+}
+
+function abrirConfig() {
+  preencherConfig();
+  mostrarTela('tela-config');
+  carregarSiteConfig();
+}
+
+function salvarConfig() {
+  const pat = document.getElementById('cfg-pat').value.trim();
+  const o = document.getElementById('cfg-owner').value.trim();
+  const r = document.getElementById('cfg-repo').value.trim();
+  if (!o) { showToast('Digite o usuário GitHub', 'err'); return; }
+  if (!r) { showToast('Digite o nome do repositório', 'err'); return; }
+  if (pat && pat !== '••••••••••••••••') {
+    localStorage.setItem('df_pat', pat);
+  }
+  ghOwner = o; ghRepo = r;
+  localStorage.setItem('df_repo', JSON.stringify({o, r}));
+  showToast('Configurações salvas ✓');
+  setTimeout(() => mostrarHome(), 800);
+}
+
+// ============================================================
+// HOME
+// ============================================================
+function mostrarHome() {
+  const nome = user?.user_metadata?.full_name || user?.email?.split('@')[0] || '';
+  document.getElementById('greeting').textContent = `Olá, ${nome.split(' ')[0]} 👋`;
+
+  const av = user?.user_metadata?.avatar_url;
+  const avEl = document.getElementById('topbar-av');
+  avEl.innerHTML = av ? `<img src="${av}"/>` : (nome[0]||'?').toUpperCase();
+
+  document.getElementById('col-list').innerHTML = COLS.map(c=>`
+    <div class="col-card" onclick="abrirCol('${c.id}')">
+      <div class="col-icon">${c.icon}</div>
+      <div class="col-info"><h3>${c.nome}</h3><p>${c.sub}</p></div>
+      <div class="col-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`).join('');
+
+  mostrarTela('tela-home');
+}
+
+function confirmarLogout() {
+  dlg('Sair do admin?','Você precisará entrar novamente.',()=>{fecharDialog();netlifyIdentity.logout();});
+}
+
+// ============================================================
+// LISTA
+// ============================================================
+async function abrirCol(id) {
+  col = COLS.find(c=>c.id===id);
+  document.getElementById('lista-titulo').textContent = col.nome;
+  mostrarTela('tela-lista');
+  await carregarLista();
+}
+
+async function carregarLista() {
+  const el = document.getElementById('lista-scroll');
+  el.innerHTML = `<div class="empty-state"><div class="spinner" style="margin:0 auto 12px;width:22px;height:22px;border-width:2px"></div><p>Carregando...</p></div>`;
+  try {
+    const files = await ghListar(col.pasta);
+    const mds = files.filter(f=>f.name.endsWith('.md'));
+    if (!mds.length) { el.innerHTML = vazio(); pecas=[]; return; }
+    pecas = await Promise.all(mds.map(async f=>{
+      const c = await ghLer(`${col.pasta}/${f.name}`);
+      return { slug:f.name.replace('.md',''), sha:c.sha, ...parseFM(c.txt) };
+    }));
+    renderLista();
+  } catch(e) { el.innerHTML=`<div class="empty-state"><h3>Erro</h3><p>${e.message}</p></div>`; console.error(e); }
+}
+
+function vazio(){return`<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><h3>Nenhuma peça</h3><p>Toque em + para adicionar</p></div>`;}
+
+function renderLista(){
+  const el=document.getElementById('lista-scroll');
+  if(!pecas.length){el.innerHTML=vazio();return;}
+  el.innerHTML=pecas.map(p=>{
+    const fotoUrl = p.foto ? `https://raw.githubusercontent.com/${ghOwner}/${ghRepo}/main${p.foto.startsWith('/')?p.foto:'/'+p.foto}` : '';
+    const thumb = fotoUrl ? `<img src="${esc(fotoUrl)}" loading="lazy" onerror="this.style.display='none'"/>` : '';
+    const bs = [];
+    bs.push(p.vendida?`<span class="badge badge-sold">Vendida</span>`:`<span class="badge badge-ok">Disponível</span>`);
+    if(p.destaque) bs.push(`<span class="badge badge-star">⭐</span>`);
+    const meta = p[col.campo]||p.categoria||'';
+    return`<div class="piece-row">
+      <div class="piece-thumb">${thumb}</div>
+      <div class="piece-body" onclick="editarPeca('${esc(p.slug)}')">
+        <div class="piece-name">${esc(p.titulo||p.slug)}</div>
+        <div class="piece-meta">${bs.join('')}${meta?`<span>${esc(meta)}</span>`:''}</div>
+      </div>
+      <div class="piece-del" onclick="delDireto('${esc(p.slug)}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// EDIÇÃO
+// ============================================================
+function novaPeca(){
+  editSlug=null;editSha=null;fotoB64=null;fotoNome=null;
+  document.getElementById('edit-titulo').textContent='Nova Peça';
+  document.getElementById('btn-del').style.display='none';
+  resetForm();
+  configCampos();
+  mostrarTela('tela-edit');
+  document.querySelector('.edit-scroll').scrollTop=0;
+}
+
+async function editarPeca(slug){
+  const p=pecas.find(x=>x.slug===slug);if(!p)return;
+  editSlug=slug;editSha=p.sha;fotoB64=null;fotoNome=null;
+  document.getElementById('edit-titulo').textContent='Editar Peça';
+  document.getElementById('btn-del').style.display='';
+  document.getElementById('f-titulo').value=p.titulo||'';
+  document.getElementById('f-material').value=p[col.campo]||'';
+  document.getElementById('f-descricao').value=p.descricao||'';
+  document.getElementById('f-preco').value=p.preco||'';
+  document.getElementById('f-ordem').value=p.ordem_destaque||'';
+  setOn('tog-disponivel',!p.vendida);
+  setOn('tog-destaque',!!p.destaque);
+  document.getElementById('f-ordem-wrap').style.display=p.destaque?'':'none';
+  if(p.foto){document.getElementById('foto-prev').src=`https://raw.githubusercontent.com/${ghOwner}/${ghRepo}/main${p.foto}`;document.getElementById('foto-prev').style.display='block';document.getElementById('foto-box').classList.add('tem-foto');}
+  else{document.getElementById('foto-prev').style.display='none';document.getElementById('foto-box').classList.remove('tem-foto');}
+  configCampos();
+  if(col.cats&&p.categoria)document.getElementById('f-categoria').value=p.categoria;
+  mostrarTela('tela-edit');
+  document.querySelector('.edit-scroll').scrollTop=0;
+}
+
+function resetForm(){
+  ['f-titulo','f-material','f-descricao','f-preco','f-ordem'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('foto-prev').style.display='none';
+  document.getElementById('foto-box').classList.remove('tem-foto');
+  setOn('tog-disponivel',true);setOn('tog-destaque',false);
+  document.getElementById('f-ordem-wrap').style.display='none';
+}
+
+function configCampos(){
+  document.getElementById('f-mat-label').textContent=col.label;
+  document.getElementById('f-material').placeholder=col.id==='pecas'?'Ex: Imbuia recuperada':'Ex: Ametista, Quartzo Rosa';
+  const wrap=document.getElementById('f-cat-wrap');
+  if(col.cats){wrap.style.display='';document.getElementById('f-categoria').innerHTML=col.cats.map(c=>`<option>${c}</option>`).join('');}
+  else wrap.style.display='none';
+  document.getElementById('tog-destaque').style.display=col.dest?'':'none';
+}
+
+async function salvarPeca(){
+  const titulo=document.getElementById('f-titulo').value.trim();
+  if(!titulo){showToast('Nome obrigatório','err');document.getElementById('f-titulo').focus();return;}
+  showLoader('Salvando peça...');
+  try{
+    let foto=null;
+    if(fotoB64){
+      showLoader('Enviando foto...');
+      const ext=(fotoNome||'img').replace(/.*\./,'')||'jpg';
+      const fn=`${slugify(titulo)}-${Date.now()}.${ext}`;
+      await ghSalvar(`images/uploads/${fn}`,fotoB64,`Foto: ${titulo}`);
+      foto=`/images/uploads/${fn}`;
+    } else if(editSlug){
+      foto=pecas.find(p=>p.slug===editSlug)?.foto||null;
+    }
+    const fields={
+      titulo, foto:foto||'',
+      [col.campo]:document.getElementById('f-material').value.trim()||null,
+      descricao:document.getElementById('f-descricao').value.trim()||null,
+      preco:parseFloat(document.getElementById('f-preco').value)||null,
+      vendida:!isOn('tog-disponivel'),
+    };
+    if(col.cats)fields.categoria=document.getElementById('f-categoria').value;
+    if(col.dest){
+      fields.destaque=isOn('tog-destaque');
+      if(fields.destaque)fields.ordem_destaque=parseInt(document.getElementById('f-ordem').value)||1;
+    }
+    const slug=editSlug||slugify(titulo)+'-'+Date.now();
+    const md=buildMD(fields);
+    showLoader('Publicando...');
+    await ghSalvar(`${col.pasta}/${slug}.md`,b64(md),editSlug?`Atualiza "${titulo}"`:`Adiciona "${titulo}"`,editSha);
+    hideLoader();
+    showToast(`"${titulo}" salva ✓`);
+    await carregarLista();
+    mostrarTela('tela-lista');
+  }catch(e){hideLoader();showToast('Erro: '+e.message,'err');console.error(e);}
+}
+
+// ============================================================
+// DELETE
+// ============================================================
+function delDireto(slug){
+  const p=pecas.find(x=>x.slug===slug);
+  dlg('Excluir peça?',`"${p?.titulo||slug}" será removida.`,async()=>{
+    fecharDialog();showLoader('Excluindo...');
+    try{await ghDeletar(`${col.pasta}/${slug}.md`,p.sha,`Remove "${p?.titulo}"`);hideLoader();showToast('Excluída');await carregarLista();}
+    catch(e){hideLoader();showToast('Erro: '+e.message,'err');}
+  });
+}
+
+function confirmarDelete(){
+  if(!editSlug)return;
+  const p=pecas.find(x=>x.slug===editSlug);
+  dlg('Excluir esta peça?','Esta ação não pode ser desfeita.',async()=>{
+    fecharDialog();showLoader('Excluindo...');
+    try{await ghDeletar(`${col.pasta}/${editSlug}.md`,editSha,`Remove "${p?.titulo}"`);hideLoader();showToast('Excluída');await carregarLista();mostrarTela('tela-lista');}
+    catch(e){hideLoader();showToast('Erro: '+e.message,'err');}
+  });
+}
+
+// ============================================================
+// FOTO
+// ============================================================
+function selecionarFoto(input){
+  const f=input.files[0];if(!f)return;
+  if(f.size>10*1024*1024){showToast('Foto muito grande (máx 10MB)','err');return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const cv=document.createElement('canvas');
+      let w=img.width,h=img.height,M=1800;
+      if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}
+      cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);
+      const durl=cv.toDataURL('image/jpeg',.88);
+      fotoB64=durl.split(',')[1];
+      fotoNome=f.name.replace(/\.[^.]+$/,'.jpg');
+      const pv=document.getElementById('foto-prev');
+      pv.src=durl;pv.style.display='block';
+      document.getElementById('foto-box').classList.add('tem-foto');
+    };img.src=e.target.result;
+  };r.readAsDataURL(f);
+}
+
+// ============================================================
+// GITHUB API — direto pelo Personal Access Token
+// ============================================================
+function ghPAT(){
+  const t=localStorage.getItem('df_pat');
+  if(!t)throw new Error('Token do GitHub não configurado. Abra as configurações.');
+  return t;
+}
+
+async function ghReq(method,path,body){
+  const url=`https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+  const res=await fetch(url,{
+    method,
+    headers:{
+      'Authorization':`Bearer ${ghPAT()}`,
+      'Content-Type':'application/json',
+      'Accept':'application/vnd.github.v3+json',
+      'X-GitHub-Api-Version':'2022-11-28',
+    },
+    body:body?JSON.stringify(body):undefined,
+  });
+  if(!res.ok){
+    const err=await res.json().catch(()=>({}));
+    if(res.status===401)throw new Error('Token inválido ou expirado. Vá em Configurações e atualize o token.');
+    if(res.status===403)throw new Error('Sem permissão. O token precisa ter permissão "repo".');
+    if(res.status===404)throw new Error('Repositório não encontrado. Verifique o usuário e nome do repo nas configurações.');
+    throw new Error(err.message||`HTTP ${res.status}`);
+  }
+  return res.status===204?null:res.json();
+}
+
+async function ghLer(path){
+  const d=await ghReq('GET',path);
+  return{sha:d.sha,txt:decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))))};
+}
+
+async function ghListar(pasta){
+  const url=`https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${pasta}`;
+  const res=await fetch(url,{
+    headers:{
+      'Authorization':`Bearer ${ghPAT()}`,
+      'Accept':'application/vnd.github.v3+json',
+      'X-GitHub-Api-Version':'2022-11-28',
+    }
+  });
+  if(res.status===404)return[];
+  if(res.status===401)throw new Error('Token inválido. Vá em Configurações e atualize o token.');
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||`HTTP ${res.status}`);}
+  return res.json();
+}
+
+async function ghSalvar(path,content,msg,sha){
+  const body={message:msg,content};
+  if(sha)body.sha=sha;
+  return ghReq('PUT',path,body);
+}
+
+async function ghDeletar(path,sha,msg){
+  const url=`https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+  const res=await fetch(url,{
+    method:'DELETE',
+    headers:{
+      'Authorization':`Bearer ${ghPAT()}`,
+      'Content-Type':'application/json',
+      'Accept':'application/vnd.github.v3+json',
+      'X-GitHub-Api-Version':'2022-11-28',
+    },
+    body:JSON.stringify({message:msg,sha}),
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||`HTTP ${res.status}`);}
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function parseFM(t){
+  const m=t.match(/^---\s*\n([\s\S]*?)\n---/);if(!m)return{};
+  const o={};
+  m[1].split('\n').forEach(l=>{
+    const r=l.match(/^([a-zA-Z_]+):\s*(.*)$/);if(!r)return;
+    let v=r[2].trim();
+    if((v.startsWith('"')&&v.endsWith('"'))||(v.startsWith("'")&&v.endsWith("'")))v=v.slice(1,-1);
+    if(v==='true')v=true;else if(v==='false')v=false;else if(v==='null'||v==='')v=null;
+    else if(/^-?\d+\.?\d*$/.test(v))v=parseFloat(v);
+    o[r[1]]=v;
+  });return o;
+}
+function buildMD(f){
+  const l=['---'];
+  Object.entries(f).forEach(([k,v])=>{
+    if(v===null||v===undefined){l.push(`${k}: null`);return;}
+    if(typeof v==='boolean'){l.push(`${k}: ${v}`);return;}
+    if(typeof v==='number'){l.push(`${k}: ${v}`);return;}
+    const s=String(v);
+    l.push(s.includes('"')||s.includes('\n')||s.includes(':')? `${k}: '${s.replace(/'/g,"''")}'`: `${k}: "${s}"`);
+  });l.push('---');return l.join('\n')+'\n';
+}
+function b64(s){return btoa(unescape(encodeURIComponent(s)));}
+function slugify(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);}
+function esc(s){if(!s)return'';return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+
+// ============================================================
+// TOGGLES / NAV
+// ============================================================
+function togRow(id){
+  const r=document.getElementById(id);r.classList.toggle('on');
+  if(id==='tog-destaque')document.getElementById('f-ordem-wrap').style.display=r.classList.contains('on')?'':'none';
+}
+function setOn(id,v){const r=document.getElementById(id);v?r.classList.add('on'):r.classList.remove('on');}
+function isOn(id){return document.getElementById(id).classList.contains('on');}
+function mostrarTela(id){document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));document.getElementById(id).classList.add('ativa');}
+
+// ============================================================
+// TOAST / LOADER / DIALOG
+// ============================================================
+let _t;
+function showToast(msg,type=''){
+  const el=document.getElementById('toast');
+  const ic=type==='err'?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>`:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>`;
+  el.innerHTML=ic+msg;el.className='toast'+(type?' '+type:'')+' show';
+  clearTimeout(_t);_t=setTimeout(()=>el.classList.remove('show'),3500);
+}
+function showLoader(msg){document.getElementById('loader-msg').textContent=msg||'Aguarde...';document.getElementById('loader').style.display='flex';}
+function hideLoader(){document.getElementById('loader').style.display='none';}
+function dlg(title,msg,onOk){document.getElementById('d-title').textContent=title;document.getElementById('d-msg').textContent=msg;document.getElementById('d-ok').onclick=onOk;document.getElementById('dialog').style.display='flex';}
+function fecharDialog(){document.getElementById('dialog').style.display='none';}
+
+// ============================================================
+// CONFIGURAÇÕES DO SITE (_data/site.yml)
+// ============================================================
+async function carregarSiteConfig() {
+  try {
+    const f = await ghLer('_data/site.yml');
+    const cfg = parseYamlSimples(f.txt);
+    document.getElementById('sc-whats').value       = cfg.whatsapp_numero || '';
+    document.getElementById('sc-insta').value        = cfg.instagram_url || '';
+    document.getElementById('sc-msg').value          = cfg.mensagem_whatsapp || '';
+    document.getElementById('sc-alma-whats').value   = cfg.alma_whatsapp_numero || '';
+    document.getElementById('sc-alma-insta').value   = cfg.alma_instagram_url || '';
+    document.getElementById('sc-cidade').value        = cfg.cidade || '';
+  } catch(e) {
+    // Arquivo pode não existir ainda — ok, deixa os campos vazios
+    console.warn('site.yml não encontrado, campos em branco:', e.message);
+  }
+}
+
+async function salvarSiteConfig() {
+  const whats      = document.getElementById('sc-whats').value.trim().replace(/\D/g,'');
+  const insta      = document.getElementById('sc-insta').value.trim();
+  const msg        = document.getElementById('sc-msg').value.trim();
+  const almaWhats  = document.getElementById('sc-alma-whats').value.trim().replace(/\D/g,'');
+  const almaInsta  = document.getElementById('sc-alma-insta').value.trim();
+  const cidade     = document.getElementById('sc-cidade').value.trim();
+
+  if (!whats) { showToast('WhatsApp do D'Fantato é obrigatório', 'err'); return; }
+
+  showLoader('Salvando configurações...');
+  try {
+    // Lê SHA atual do arquivo (necessário para atualizar)
+    let sha = undefined;
+    try { const f = await ghLer('_data/site.yml'); sha = f.sha; } catch {}
+
+    const yml = [
+      `# Configurações do site — editadas pelo admin`,
+      `whatsapp_numero: "${whats}"`,
+      `instagram_url: "${insta}"`,
+      `mensagem_whatsapp: "${msg || 'Olá! Tenho interesse na peça *{nome}*. Poderia me passar mais informações?'}"`,
+      `alma_whatsapp_numero: "${almaWhats || whats}"`,
+      `alma_instagram_url: "${almaInsta || insta}"`,
+      `cidade: "${cidade}"`,
+    ].join('
+') + '
+';
+
+    await ghSalvar('_data/site.yml', b64(yml), 'Atualiza configurações do site', sha);
+    hideLoader();
+    showToast('Configurações salvas ✓ — site atualiza em ~1 min');
+  } catch(e) {
+    hideLoader();
+    showToast('Erro: ' + e.message, 'err');
+    console.error(e);
+  }
+}
+
+function parseYamlSimples(txt) {
+  const o = {};
+  txt.split('
+').forEach(line => {
+    line = line.trim();
+    if (!line || line.startsWith('#')) return;
+    const m = line.match(/^([a-zA-Z_]+):\s*"?(.*?)"?\s*$/);
+    if (!m) return;
+    o[m[1]] = m[2].replace(/^["']|["']$/g,'');
+  });
+  return o;
+}
+</script>
+</body>
+</html>

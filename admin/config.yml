@@ -1,0 +1,113 @@
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: 'Adiciona "{{slug}}"'
+    update: 'Atualiza "{{slug}}"'
+    delete: 'Remove "{{slug}}"'
+    uploadMedia: 'Adiciona imagem {{path}}'
+    deleteMedia: 'Remove imagem {{path}}'
+
+locale: 'pt'
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+site_url: "https://dfantato.com.br"
+display_url: "https://dfantato.com.br"
+logo_url: "/images/logo-gold.png"
+
+collections:
+
+  # ============================================================
+  # D'FANTATO WOOD — Peças
+  # ============================================================
+  - name: "pecas"
+    label: "D'Fantato — Peças"
+    label_singular: "Peça"
+    folder: "pecas"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{titulo}} — {{categoria}}{{#if vendida}} ✗{{/if}}{{#if destaque}} ⭐{{/if}}"
+    fields:
+      - {label: "Foto", name: "foto", widget: "image", required: true}
+      - {label: "Nome", name: "titulo", widget: "string", required: true}
+      - label: "Categoria"
+        name: "categoria"
+        widget: "select"
+        required: true
+        options: ["Esculturas", "Obras Decorativas", "Bowls e Travessas", "Tábuas e Acessórios"]
+      - {label: "Tipo de Madeira", name: "tipo_madeira", widget: "string", required: false}
+      - {label: "Descrição", name: "descricao", widget: "text", required: false}
+      - {label: "Preço (R$)", name: "preco", widget: "number", required: false, value_type: "float", min: 0}
+      - {label: "★ Em Destaque", name: "destaque", widget: "boolean", default: false}
+      - {label: "Ordem do Destaque", name: "ordem_destaque", widget: "number", required: false, default: 0}
+      - {label: "Vendida", name: "vendida", widget: "boolean", default: false}
+
+  # ============================================================
+  # JAPAMALA — Malas de Meditação (parte da Alma em Contas)
+  # ============================================================
+  - name: "japamala"
+    label: "Alma — Japamala"
+    label_singular: "Japamala"
+    folder: "japamala"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{titulo}}{{#if vendida}} ✗{{/if}}"
+    fields:
+      - {label: "Foto", name: "foto", widget: "image", required: true}
+      - {label: "Nome", name: "titulo", widget: "string", required: true, hint: "Ex: Japamala Ametista 108 Contas"}
+      - {label: "Material / Pedra", name: "material", widget: "string", required: false, hint: "Ex: Ametista, Quartzo Rosa, Olho de Tigre"}
+      - {label: "Descrição", name: "descricao", widget: "text", required: false}
+      - {label: "Preço (R$)", name: "preco", widget: "number", required: false, value_type: "float", min: 0}
+      - {label: "Vendida", name: "vendida", widget: "boolean", default: false}
+
+  # ============================================================
+  # ALMA EM CONTAS — Outras Peças (pulseiras, colares, etc)
+  # ============================================================
+  - name: "alma"
+    label: "Alma — Pulseiras & Colares"
+    label_singular: "Peça Alma"
+    folder: "alma"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    summary: "{{titulo}}{{#if vendida}} ✗{{/if}}"
+    fields:
+      - {label: "Foto", name: "foto", widget: "image", required: true}
+      - {label: "Nome", name: "titulo", widget: "string", required: true, hint: "Ex: Pulseira Ametista Intenção"}
+      - {label: "Material / Pedra", name: "material", widget: "string", required: false}
+      - {label: "Descrição", name: "descricao", widget: "text", required: false}
+      - {label: "Preço (R$)", name: "preco", widget: "number", required: false, value_type: "float", min: 0}
+      - {label: "Vendida", name: "vendida", widget: "boolean", default: false}
+
+  # ============================================================
+  # CONFIGURAÇÕES GERAIS
+  # ============================================================
+  - name: "config"
+    label: "Configurações Gerais"
+    files:
+      - name: "site"
+        label: "Contatos e Configurações"
+        file: "_data/site.yml"
+        fields:
+          - widget: "object"
+            name: "dfantato"
+            label: "D'Fantato Wood"
+            fields:
+              - {label: "WhatsApp (com DDI+DDD)", name: "whatsapp_numero", widget: "string", pattern: ['^\d+$', 'Só números'], hint: "Ex: 5548988746307"}
+              - {label: "Link Instagram", name: "instagram_url", widget: "string"}
+              - {label: "Mensagem de Interesse", name: "mensagem_whatsapp", widget: "string", hint: "Use {nome} para o nome da peça"}
+          - widget: "object"
+            name: "alma"
+            label: "Alma em Contas"
+            fields:
+              - {label: "WhatsApp da Alma em Contas", name: "alma_whatsapp_numero", widget: "string", pattern: ['^\d+$', 'Só números'], hint: "Pode ser diferente do D'Fantato"}
+              - {label: "Instagram da Alma em Contas", name: "alma_instagram_url", widget: "string"}
+          - {label: "Cidade", name: "cidade", widget: "string"}

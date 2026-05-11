@@ -1,0 +1,54 @@
+name: Atualizar índices de peças
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pecas/**'
+      - 'japamala/**'
+      - 'alma/**'
+  workflow_dispatch:
+
+jobs:
+  atualizar-indices:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gerar índices
+        run: |
+          python3 << 'PYEOF'
+          import os, re
+
+          def slugs(pasta):
+              if not os.path.isdir(pasta): return []
+              return sorted([f.replace('.md','') for f in os.listdir(pasta) if f.endswith('.md') and not f.startswith('.')])
+
+          def atualizar(arquivo, var, lista):
+              with open(arquivo, 'r', encoding='utf-8') as f:
+                  content = f.read()
+              body = ',\n'.join([f"  '{s}'" for s in lista])
+              novo = f"const {var} = [\n{body},\n];" if lista else f"const {var} = [];"
+              updated = re.sub(rf'const {var} = \[[^\]]*\];', novo, content, flags=re.DOTALL)
+              if updated != content:
+                  with open(arquivo, 'w', encoding='utf-8') as f:
+                      f.write(updated)
+                  print(f"  {var}: {len(lista)} peças → {arquivo}")
+              else:
+                  print(f"  {var}: sem mudanças")
+
+          print("Atualizando índices...")
+          atualizar('site.js',   'PECAS_INDEX',    slugs('pecas'))
+          atualizar('alma.html', 'JAPAMALA_INDEX', slugs('japamala'))
+          atualizar('alma.html', 'ALMA_INDEX',     slugs('alma'))
+          PYEOF
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add site.js alma.html
+          git diff --staged --quiet || git commit -m "Auto-atualizar indices"
+          git push
