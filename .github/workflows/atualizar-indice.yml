@@ -1,60 +1,54 @@
-name: Atualizar índice de peças
+name: Atualizar índices de peças
 
 on:
   push:
     branches: [main]
     paths:
       - 'pecas/**'
+      - 'japamala/**'
+      - 'alma/**'
   workflow_dispatch:
 
 jobs:
-  atualizar-indice:
+  atualizar-indices:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
 
-      - name: Gerar lista de peças
+      - name: Gerar índices
         run: |
-          cd pecas
-          # Lista todos os arquivos .md, remove a extensão, formata como array JS
-          PECAS=$(ls *.md 2>/dev/null | sed 's/\.md$//' | sed "s/.*/  '&',/" | tr '\n' '\n')
-          cd ..
-
-          # Atualiza o site.js com a nova lista
           python3 << 'PYEOF'
           import os, re
 
-          # Lê todas as peças
-          pecas = sorted([f.replace('.md','') for f in os.listdir('pecas') if f.endswith('.md')])
+          def slugs(pasta):
+              if not os.path.isdir(pasta): return []
+              return sorted([f.replace('.md','') for f in os.listdir(pasta) if f.endswith('.md') and not f.startswith('.')])
 
-          # Lê o site.js
-          with open('site.js', 'r', encoding='utf-8') as f:
-              content = f.read()
+          def atualizar(arquivo, var, lista):
+              with open(arquivo, 'r', encoding='utf-8') as f:
+                  content = f.read()
+              body = ',\n'.join([f"  '{s}'" for s in lista])
+              novo = f"const {var} = [\n{body},\n];" if lista else f"const {var} = [];"
+              updated = re.sub(rf'const {var} = \[[^\]]*\];', novo, content, flags=re.DOTALL)
+              if updated != content:
+                  with open(arquivo, 'w', encoding='utf-8') as f:
+                      f.write(updated)
+                  print(f"  {var}: {len(lista)} peças → {arquivo}")
+              else:
+                  print(f"  {var}: sem mudanças")
 
-          # Gera nova lista
-          lista = ',\n'.join([f"  '{p}'" for p in pecas])
-          novo_bloco = f"const PECAS_INDEX = [\n{lista},\n];"
-
-          # Substitui no arquivo
-          content = re.sub(
-              r'const PECAS_INDEX = \[[^\]]*\];',
-              novo_bloco,
-              content,
-              flags=re.DOTALL
-          )
-
-          with open('site.js', 'w', encoding='utf-8') as f:
-              f.write(content)
-
-          print(f"Índice atualizado com {len(pecas)} peças")
+          print("Atualizando índices...")
+          atualizar('site.js',   'PECAS_INDEX',    slugs('pecas'))
+          atualizar('alma.html', 'JAPAMALA_INDEX', slugs('japamala'))
+          atualizar('alma.html', 'ALMA_INDEX',     slugs('alma'))
           PYEOF
 
-      - name: Commit das mudanças
+      - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add site.js
-          git diff --staged --quiet || git commit -m "Auto-atualizar índice de peças"
+          git add site.js alma.html
+          git diff --staged --quiet || git commit -m "Auto-atualizar indices"
           git push

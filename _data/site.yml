@@ -1,13 +1,14 @@
+# ============================================================
+# CONFIGURAÇÕES DO SITE
+# Edite aqui pelo admin (Configurações Gerais → Site e Contato)
+# ============================================================
+
+# D'FANTATO WOOD
 whatsapp_numero: "5548988746307"
-instagram_url: https://www.instagram.com/__dfantato/
-cidade: Ribeirão Bonito/SP
-mensagem_whatsapp: Olá! Tenho interesse na peça *{nome}*. Poderia me passar mais informações?
+instagram_url: "https://www.instagram.com/__dfantato/"
+cidade: "Tubarão / SC"
+mensagem_whatsapp: "Olá! Tenho interesse na peça *{nome}*. Poderia me passar mais informações?"
+
+# ALMA EM CONTAS (pode ser número e Instagram diferentes)
 alma_whatsapp_numero: "5548988746307"
-alma_instagram_url: https://www.instagram.com/__dfantato/
-dfantato:
-  whatsapp_numero: "5548998015006"
-  mensagem_whatsapp: Caso tenha interesse em alguma peça entre em contato pelo whatsaap
-  instagram_url: https://www.instagram.com/__dfantato?igsh=MjR2MWNkNWFuc3Jv
-alma:
-  alma_instagram_url: https://www.instagram.com/alma_emcontas?igsh=MTdkdmZjbW1ic3Jobw%3D%3D&utm_source=qr
-  alma_whatsapp_numero: "5516997926732"
+alma_instagram_url: "https://www.instagram.com/__dfantato/"
