@@ -324,7 +324,7 @@ input,textarea,select{font:inherit;color:inherit;-webkit-appearance:none;appeara
     </div>
     <div class="topbar-right">
       <div class="topbar-av" id="topbar-av"></div>
-      <div class="icon-btn" onclick="mostrarTela('tela-config')" title="Configurações">
+      <div class="icon-btn" onclick="abrirConfig()" title="Configurações">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       </div>
       <div class="icon-btn" onclick="confirmarLogout()" title="Sair">
@@ -490,6 +490,59 @@ input,textarea,select{font:inherit;color:inherit;-webkit-appearance:none;appeara
       Salvar Configurações
     </button>
 
+    <!-- CONFIGURAÇÕES DO SITE -->
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">D'Fantato Wood — Contato</div>
+      <p style="font-size:12px;color:var(--faint);margin-bottom:14px;line-height:1.5">Aparece nos botões do site e nas mensagens de interesse das peças</p>
+      <div class="ffield">
+        <label>WhatsApp (com DDI+DDD, só números)</label>
+        <input id="sc-whats" type="tel" inputmode="numeric" placeholder="5548988746307"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+        <small style="display:block;margin-top:6px;font-size:12px;color:var(--dim)">Ex: 55 (Brasil) + 48 (DDD) + número = 5548988746307</small>
+      </div>
+      <div class="ffield">
+        <label>Instagram (link completo)</label>
+        <input id="sc-insta" type="url" inputmode="url" placeholder="https://www.instagram.com/__dfantato/"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+      <div class="ffield">
+        <label>Mensagem de interesse nas peças</label>
+        <input id="sc-msg" type="text" placeholder="Olá! Tenho interesse na peça *{nome}*..."
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+        <small style="display:block;margin-top:6px;font-size:12px;color:var(--dim)">Use <strong>{nome}</strong> para inserir o nome da peça automaticamente</small>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:4px">Alma em Contas — Contato</div>
+      <p style="font-size:12px;color:var(--faint);margin-bottom:14px;line-height:1.5">Pode ser diferente do D'Fantato Wood</p>
+      <div class="ffield">
+        <label>WhatsApp da Alma em Contas</label>
+        <input id="sc-alma-whats" type="tel" inputmode="numeric" placeholder="5548988746307"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+      <div class="ffield">
+        <label>Instagram da Alma em Contas</label>
+        <input id="sc-alma-insta" type="url" inputmode="url" placeholder="https://www.instagram.com/..."
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:14px">Geral</div>
+      <div class="ffield">
+        <label>Cidade / Estado</label>
+        <input id="sc-cidade" type="text" placeholder="Tubarão / SC" autocapitalize="words"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="salvarSiteConfig()" style="margin-top:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+      Salvar Informações do Site
+    </button>
+
+    <!-- CONTA -->
     <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--rule)">
       <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px">Conta</div>
       <button class="btn btn-ghost" onclick="confirmarLogout()">
@@ -639,6 +692,12 @@ function preencherConfig() {
   document.getElementById('cfg-repo').value = ghRepo || '';
   const pat = localStorage.getItem('df_pat') || '';
   document.getElementById('cfg-pat').value = pat ? '••••••••••••••••' : '';
+}
+
+function abrirConfig() {
+  preencherConfig();
+  mostrarTela('tela-config');
+  carregarSiteConfig();
 }
 
 function salvarConfig() {
@@ -992,6 +1051,76 @@ function showLoader(msg){document.getElementById('loader-msg').textContent=msg||
 function hideLoader(){document.getElementById('loader').style.display='none';}
 function dlg(title,msg,onOk){document.getElementById('d-title').textContent=title;document.getElementById('d-msg').textContent=msg;document.getElementById('d-ok').onclick=onOk;document.getElementById('dialog').style.display='flex';}
 function fecharDialog(){document.getElementById('dialog').style.display='none';}
+
+// ============================================================
+// CONFIGURAÇÕES DO SITE (_data/site.yml)
+// ============================================================
+async function carregarSiteConfig() {
+  try {
+    const f = await ghLer('_data/site.yml');
+    const cfg = parseYamlSimples(f.txt);
+    document.getElementById('sc-whats').value       = cfg.whatsapp_numero || '';
+    document.getElementById('sc-insta').value        = cfg.instagram_url || '';
+    document.getElementById('sc-msg').value          = cfg.mensagem_whatsapp || '';
+    document.getElementById('sc-alma-whats').value   = cfg.alma_whatsapp_numero || '';
+    document.getElementById('sc-alma-insta').value   = cfg.alma_instagram_url || '';
+    document.getElementById('sc-cidade').value        = cfg.cidade || '';
+  } catch(e) {
+    // Arquivo pode não existir ainda — ok, deixa os campos vazios
+    console.warn('site.yml não encontrado, campos em branco:', e.message);
+  }
+}
+
+async function salvarSiteConfig() {
+  const whats      = document.getElementById('sc-whats').value.trim().replace(/\D/g,'');
+  const insta      = document.getElementById('sc-insta').value.trim();
+  const msg        = document.getElementById('sc-msg').value.trim();
+  const almaWhats  = document.getElementById('sc-alma-whats').value.trim().replace(/\D/g,'');
+  const almaInsta  = document.getElementById('sc-alma-insta').value.trim();
+  const cidade     = document.getElementById('sc-cidade').value.trim();
+
+  if (!whats) { showToast('WhatsApp do D'Fantato é obrigatório', 'err'); return; }
+
+  showLoader('Salvando configurações...');
+  try {
+    // Lê SHA atual do arquivo (necessário para atualizar)
+    let sha = undefined;
+    try { const f = await ghLer('_data/site.yml'); sha = f.sha; } catch {}
+
+    const yml = [
+      `# Configurações do site — editadas pelo admin`,
+      `whatsapp_numero: "${whats}"`,
+      `instagram_url: "${insta}"`,
+      `mensagem_whatsapp: "${msg || 'Olá! Tenho interesse na peça *{nome}*. Poderia me passar mais informações?'}"`,
+      `alma_whatsapp_numero: "${almaWhats || whats}"`,
+      `alma_instagram_url: "${almaInsta || insta}"`,
+      `cidade: "${cidade}"`,
+    ].join('
+') + '
+';
+
+    await ghSalvar('_data/site.yml', b64(yml), 'Atualiza configurações do site', sha);
+    hideLoader();
+    showToast('Configurações salvas ✓ — site atualiza em ~1 min');
+  } catch(e) {
+    hideLoader();
+    showToast('Erro: ' + e.message, 'err');
+    console.error(e);
+  }
+}
+
+function parseYamlSimples(txt) {
+  const o = {};
+  txt.split('
+').forEach(line => {
+    line = line.trim();
+    if (!line || line.startsWith('#')) return;
+    const m = line.match(/^([a-zA-Z_]+):\s*"?(.*?)"?\s*$/);
+    if (!m) return;
+    o[m[1]] = m[2].replace(/^["']|["']$/g,'');
+  });
+  return o;
+}
 </script>
 </body>
 </html>
