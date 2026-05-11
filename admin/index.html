@@ -324,7 +324,10 @@ input,textarea,select{font:inherit;color:inherit;-webkit-appearance:none;appeara
     </div>
     <div class="topbar-right">
       <div class="topbar-av" id="topbar-av"></div>
-      <div class="icon-btn" onclick="confirmarLogout()">
+      <div class="icon-btn" onclick="mostrarTela('tela-config')" title="Configurações">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+      <div class="icon-btn" onclick="confirmarLogout()" title="Sair">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
       </div>
     </div>
@@ -437,6 +440,66 @@ input,textarea,select{font:inherit;color:inherit;-webkit-appearance:none;appeara
   </div>
 </div>
 
+
+<!-- ============ TELA CONFIG ============ -->
+<div class="tela" id="tela-config">
+  <div class="header">
+    <div class="back-btn" onclick="mostrarTela('tela-home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </div>
+    <div class="header-title">Configurações</div>
+    <div style="width:40px"></div>
+  </div>
+  <div class="list-scroll">
+
+    <div style="margin-bottom:20px">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">GitHub — Token de Acesso</div>
+      <p style="font-size:14px;color:var(--dim);line-height:1.6;margin-bottom:16px">
+        O token conecta o admin ao seu repositório GitHub. É gerado uma única vez.
+      </p>
+      <div class="ffield">
+        <label>Personal Access Token</label>
+        <input id="cfg-pat" type="password" placeholder="ghp_xxxxxxxxxxxx"
+          autocapitalize="none" autocorrect="off" spellcheck="false"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+        <small style="display:block;margin-top:8px;font-size:12px;color:var(--dim);line-height:1.6">
+          Gere em: <strong>github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</strong><br/>
+          Marque a permissão <strong>repo</strong> e clique em "Generate token".
+        </small>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rule)">Repositório GitHub</div>
+      <div class="ffield">
+        <label>Usuário GitHub</label>
+        <input id="cfg-owner" type="text" placeholder="ex: gabrielfantato1"
+          autocapitalize="none" autocorrect="off" spellcheck="false"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+      <div class="ffield">
+        <label>Nome do Repositório</label>
+        <input id="cfg-repo" type="text" placeholder="ex: dfantato-wood"
+          autocapitalize="none" autocorrect="off" spellcheck="false"
+          style="width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none"/>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="salvarConfig()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+      Salvar Configurações
+    </button>
+
+    <div style="margin-top:32px;padding-top:20px;border-top:1px solid var(--rule)">
+      <div class="fsec-title" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px">Conta</div>
+      <button class="btn btn-ghost" onclick="confirmarLogout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sair
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- UI HELPERS -->
 <div class="toast" id="toast"></div>
 <div class="loader-screen" id="loader" style="display:none">
@@ -529,11 +592,28 @@ function mostrarUsuarioNoLogin(u) {
 function irParaAdmin() {
   if (!user) { abrirLogin(); return; }
   const saved = localStorage.getItem('df_repo');
-  if (saved) {
+  const pat = localStorage.getItem('df_pat');
+  if (saved && pat) {
     try { const s=JSON.parse(saved); if(s.o&&s.r){ghOwner=s.o;ghRepo=s.r;mostrarHome();return;} }
     catch {}
   }
-  mostrarTela('tela-repo');
+  // Sem repo: pede repo
+  if (!saved) { mostrarTela('tela-repo'); return; }
+  // Tem repo mas não tem PAT: vai direto pra config
+  try {
+    const s=JSON.parse(saved);
+    if(s.o&&s.r){ ghOwner=s.o; ghRepo=s.r; }
+  } catch {}
+  preencherConfig();
+  mostrarTela('tela-config');
+  showToast('Configure o token do GitHub para continuar');
+}
+
+function preencherConfig() {
+  document.getElementById('cfg-owner').value = ghOwner || '';
+  document.getElementById('cfg-repo').value = ghRepo || '';
+  const pat = localStorage.getItem('df_pat') || '';
+  document.getElementById('cfg-pat').value = pat ? '••••••••••••••••' : '';
 }
 
 function salvarRepo() {
@@ -543,7 +623,37 @@ function salvarRepo() {
   if (!r) { showToast('Digite o nome do repositório', 'err'); document.getElementById('rp-repo').focus(); return; }
   ghOwner = o; ghRepo = r;
   localStorage.setItem('df_repo', JSON.stringify({o, r}));
-  mostrarHome();
+  // Se não tem token ainda, vai para config
+  const pat = localStorage.getItem('df_pat');
+  if (!pat) {
+    preencherConfig();
+    mostrarTela('tela-config');
+    showToast('Agora configure o token do GitHub');
+  } else {
+    mostrarHome();
+  }
+}
+
+function preencherConfig() {
+  document.getElementById('cfg-owner').value = ghOwner || '';
+  document.getElementById('cfg-repo').value = ghRepo || '';
+  const pat = localStorage.getItem('df_pat') || '';
+  document.getElementById('cfg-pat').value = pat ? '••••••••••••••••' : '';
+}
+
+function salvarConfig() {
+  const pat = document.getElementById('cfg-pat').value.trim();
+  const o = document.getElementById('cfg-owner').value.trim();
+  const r = document.getElementById('cfg-repo').value.trim();
+  if (!o) { showToast('Digite o usuário GitHub', 'err'); return; }
+  if (!r) { showToast('Digite o nome do repositório', 'err'); return; }
+  if (pat && pat !== '••••••••••••••••') {
+    localStorage.setItem('df_pat', pat);
+  }
+  ghOwner = o; ghRepo = r;
+  localStorage.setItem('df_repo', JSON.stringify({o, r}));
+  showToast('Configurações salvas ✓');
+  setTimeout(() => mostrarHome(), 800);
 }
 
 // ============================================================
@@ -757,29 +867,32 @@ function selecionarFoto(input){
 }
 
 // ============================================================
-// GITHUB API via Netlify Git Gateway
+// GITHUB API — direto pelo Personal Access Token
 // ============================================================
-async function ghToken(){
-  if(!user)throw new Error('Não autenticado');
-  // Renova token se necessário
-  if(user.token.expires_at && Date.now() > new Date(user.token.expires_at).getTime()-60000){
-    try{ await netlifyIdentity.refresh(); user=netlifyIdentity.currentUser(); }catch{}
-  }
-  return user.token.access_token;
+function ghPAT(){
+  const t=localStorage.getItem('df_pat');
+  if(!t)throw new Error('Token do GitHub não configurado. Abra as configurações.');
+  return t;
 }
 
 async function ghReq(method,path,body){
-  const tk=await ghToken();
-  // Usa git-gateway do Netlify (não precisa de PAT pessoal)
-  const url=`/.netlify/git/github/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+  const url=`https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
   const res=await fetch(url,{
     method,
-    headers:{'Authorization':`Bearer ${tk}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
+    headers:{
+      'Authorization':`Bearer ${ghPAT()}`,
+      'Content-Type':'application/json',
+      'Accept':'application/vnd.github.v3+json',
+      'X-GitHub-Api-Version':'2022-11-28',
+    },
     body:body?JSON.stringify(body):undefined,
   });
   if(!res.ok){
     const err=await res.json().catch(()=>({}));
-    throw new Error(err.message||`HTTP ${res.status} em ${path}`);
+    if(res.status===401)throw new Error('Token inválido ou expirado. Vá em Configurações e atualize o token.');
+    if(res.status===403)throw new Error('Sem permissão. O token precisa ter permissão "repo".');
+    if(res.status===404)throw new Error('Repositório não encontrado. Verifique o usuário e nome do repo nas configurações.');
+    throw new Error(err.message||`HTTP ${res.status}`);
   }
   return res.status===204?null:res.json();
 }
@@ -790,10 +903,16 @@ async function ghLer(path){
 }
 
 async function ghListar(pasta){
-  const tk=await ghToken();
-  const url=`/.netlify/git/github/repos/${ghOwner}/${ghRepo}/contents/${pasta}`;
-  const res=await fetch(url,{headers:{'Authorization':`Bearer ${tk}`,'Accept':'application/vnd.github.v3+json'}});
+  const url=`https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${pasta}`;
+  const res=await fetch(url,{
+    headers:{
+      'Authorization':`Bearer ${ghPAT()}`,
+      'Accept':'application/vnd.github.v3+json',
+      'X-GitHub-Api-Version':'2022-11-28',
+    }
+  });
   if(res.status===404)return[];
+  if(res.status===401)throw new Error('Token inválido. Vá em Configurações e atualize o token.');
   if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||`HTTP ${res.status}`);}
   return res.json();
 }
@@ -805,9 +924,17 @@ async function ghSalvar(path,content,msg,sha){
 }
 
 async function ghDeletar(path,sha,msg){
-  const tk=await ghToken();
-  const url=`/.netlify/git/github/repos/${ghOwner}/${ghRepo}/contents/${path}`;
-  const res=await fetch(url,{method:'DELETE',headers:{'Authorization':`Bearer ${tk}`,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:msg,sha})});
+  const url=`https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+  const res=await fetch(url,{
+    method:'DELETE',
+    headers:{
+      'Authorization':`Bearer ${ghPAT()}`,
+      'Content-Type':'application/json',
+      'Accept':'application/vnd.github.v3+json',
+      'X-GitHub-Api-Version':'2022-11-28',
+    },
+    body:JSON.stringify({message:msg,sha}),
+  });
   if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||`HTTP ${res.status}`);}
 }
 
