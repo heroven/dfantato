@@ -1,11 +1,11 @@
 ---
-titulo: "Bowl Raízes"
-foto: "/images/bowl-organico.png"
-categoria: "Bowls e Travessas"
-tipo_madeira: "Madeira com vivos naturais"
-descricao: "Bowl com bordas cruas e detalhes entalhados, mantendo as características originais do tronco."
+titulo: "Cavalo Solitário"
+foto: "/images/cavalo-entrada.png"
+categoria: "Esculturas"
+tipo_madeira: "Madeira nobre recuperada"
+descricao: "Escultura em peça única de madeira nobre recuperada, entalhada à mão respeitando o formato natural do tronco. Cada veio e cicatriz foi preservado para contar a história da árvore original."
 preco: null
-destaque: false
-ordem_destaque: 0
+destaque: true
+ordem_destaque: 1
 vendida: false
 ---

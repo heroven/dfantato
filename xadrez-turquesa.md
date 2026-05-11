@@ -1,11 +1,11 @@
 ---
-titulo: "Bowl Rústico"
-foto: "/images/bowl-rustico.png"
-categoria: "Bowls e Travessas"
-tipo_madeira: "Madeira com casca natural"
-descricao: "Peça decorativa com casca natural preservada. Cada bowl é único, com cicatrizes e nós que contam a história da árvore."
+titulo: "Crina ao Vento"
+foto: "/images/cavalo-galeria.png"
+categoria: "Esculturas"
+tipo_madeira: "Madeira nobre recuperada"
+descricao: "Cabeça de cavalo esculpida com detalhes em alto relevo. A textura natural da madeira ressalta a expressão da peça."
 preco: null
-destaque: false
-ordem_destaque: 0
+destaque: true
+ordem_destaque: 2
 vendida: false
 ---
