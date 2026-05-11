@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>Admin · D'Fantato</title>
 <link rel="icon" type="image/png" href="/images/logo-gold.png"/>
+
+<!-- Netlify Identity Widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
 <style>
-/* ============================================================
-   RESET & BASE
-============================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overscroll-behavior:none}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;background:#0f0d0c;color:#ede3d0;-webkit-font-smoothing:antialiased;line-height:1.5}
@@ -16,287 +17,247 @@ img{max-width:100%;display:block}
 button,a{cursor:pointer}
 a{color:inherit;text-decoration:none}
 input,textarea,select{font:inherit;color:inherit;border-radius:0;-webkit-appearance:none;appearance:none}
-input[type="checkbox"]{-webkit-appearance:checkbox;appearance:checkbox;width:20px;height:20px;cursor:pointer}
 
-/* ============================================================
-   CSS VARIABLES
-============================================================ */
 :root{
   --bg:#0f0d0c;--bg2:#181513;--bg3:#221e1b;--bg4:#2e2824;
   --bone:#ede3d0;--dim:#9a8f82;--faint:#5a524b;
   --gold:#c9a66b;--gold2:#e4c78c;
-  --green:#5c9c7a;
-  --red:#d17564;
+  --green:#5c9c7a;--red:#d17564;
   --rule:rgba(201,166,107,0.15);
   --r:12px;--r-sm:8px;
   --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
 }
 
-/* ============================================================
-   SCREENS (JS toggles display)
-============================================================ */
+/* SCREENS */
 .screen{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
 .screen.active{display:flex}
 
-/* ============================================================
-   SETUP SCREEN
-============================================================ */
-#screen-setup{background:var(--bg);align-items:center;justify-content:flex-start;padding:0;overflow-y:auto}
-.setup-inner{width:100%;max-width:480px;margin:0 auto;padding:60px 24px 40px}
-.setup-logo{width:180px;margin:0 auto 32px;opacity:.9}
-.setup-logo img{width:100%;filter:invert(1) sepia(1) saturate(0.6) hue-rotate(0deg) brightness(1.2)}
-.setup-title{font-size:22px;font-weight:600;text-align:center;margin-bottom:6px}
-.setup-sub{font-size:14px;color:var(--dim);text-align:center;margin-bottom:36px;line-height:1.6}
+/* LOGIN SCREEN */
+#screen-login{background:var(--bg);align-items:center;justify-content:center;padding:40px 24px}
+#screen-login .inner{width:100%;max-width:380px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px}
+.login-logo{width:200px;filter:invert(1) sepia(1) saturate(.5) brightness(1.3)}
+.login-title{font-size:22px;font-weight:700}
+.login-sub{font-size:14px;color:var(--dim);line-height:1.6}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:16px 24px;background:#fff;color:#1f1f1f;border:none;border-radius:var(--r-sm);font-size:16px;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn-google:active{opacity:.85}
+.btn-google img{width:22px;height:22px}
+.login-or{font-size:13px;color:var(--faint);display:flex;align-items:center;gap:12px;width:100%}
+.login-or::before,.login-or::after{content:'';flex:1;height:1px;background:var(--rule)}
+.btn-email{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:16px 24px;background:var(--bg2);color:var(--bone);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-email:active{background:var(--bg3)}
+.login-user{display:none;flex-direction:column;align-items:center;gap:12px;width:100%}
+.login-user-info{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-sm);width:100%}
+.login-avatar{width:40px;height:40px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--gold);flex-shrink:0;overflow:hidden}
+.login-avatar img{width:100%;height:100%;object-fit:cover}
+.login-name{font-size:15px;font-weight:600;text-align:left}
+.login-email-text{font-size:12px;color:var(--dim);text-align:left}
 
-.setup-step{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.setup-step h3{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.setup-step h3 span{background:var(--gold);color:var(--bg);width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+/* LOADING STATE */
+#screen-loading{background:var(--bg);align-items:center;justify-content:center;gap:20px}
+.spinner-big{width:40px;height:40px;border:3px solid rgba(201,166,107,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-.field{margin-bottom:16px}
-.field:last-child{margin-bottom:0}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
-.field input,.field select,.field textarea{width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);transition:border-color .2s;outline:none}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
-.field textarea{min-height:80px;resize:none}
-.field small{display:block;margin-top:6px;font-size:12px;color:var(--dim);line-height:1.5}
-.field a{color:var(--gold)}
-
-/* ============================================================
-   BOTÕES
-============================================================ */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;font-size:15px;font-weight:600;border:none;border-radius:var(--r-sm);transition:all .2s;cursor:pointer;width:100%;letter-spacing:.01em}
-.btn-primary{background:var(--gold);color:#1a1208}
-.btn-primary:active{background:var(--gold2);transform:scale(.98)}
-.btn-ghost{background:transparent;color:var(--dim);border:1.5px solid var(--rule)}
-.btn-ghost:active{background:var(--bg3)}
-.btn-danger{background:rgba(209,117,100,.15);color:var(--red);border:1.5px solid rgba(209,117,100,.3)}
-.btn-danger:active{background:rgba(209,117,100,.25)}
-.btn-icon{width:44px;height:44px;padding:0;border-radius:var(--r-sm);flex-shrink:0}
-.btn svg{width:20px;height:20px;flex-shrink:0}
-.btn-sm{padding:10px 18px;font-size:14px}
-
-/* ============================================================
-   HOME SCREEN
-============================================================ */
+/* HOME */
 #screen-home{background:var(--bg)}
-.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;padding-top:calc(16px + env(safe-area-inset-top,0px));background:var(--bg2);border-bottom:1px solid var(--rule)}
+.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;padding-top:calc(14px + var(--safe-top));background:var(--bg2);border-bottom:1px solid var(--rule)}
 .topbar-brand{display:flex;align-items:center;gap:10px}
-.topbar-brand img{height:28px;width:auto;filter:invert(1) sepia(1) saturate(0.5) brightness(1.3)}
+.topbar-brand img{height:28px;width:auto;filter:invert(1) sepia(1) saturate(.5) brightness(1.3)}
 .topbar-brand span{font-size:12px;font-weight:600;color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.icon-btn{width:40px;height:40px;background:var(--bg3);border-radius:var(--r-sm);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.topbar-user{display:flex;align-items:center;gap:10px}
+.topbar-avatar{width:32px;height:32px;border-radius:50%;background:var(--bg3);border:1.5px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--gold);overflow:hidden;flex-shrink:0}
+.topbar-avatar img{width:100%;height:100%;object-fit:cover}
+.icon-btn{width:36px;height:36px;background:var(--bg3);border-radius:var(--r-sm);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;color:var(--dim)}
 .icon-btn:active{background:var(--bg4)}
+.icon-btn svg{width:18px;height:18px}
 
 .home-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px calc(20px + var(--safe-bottom))}
-
 .home-greeting{margin-bottom:24px}
 .home-greeting h1{font-size:20px;font-weight:700;margin-bottom:4px}
 .home-greeting p{font-size:14px;color:var(--dim)}
 
-.collection-card{background:var(--bg2);border:1.5px solid var(--rule);border-radius:var(--r);padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color .2s}
+.collection-card{background:var(--bg2);border:1.5px solid var(--rule);border-radius:var(--r);padding:18px;margin-bottom:12px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color .2s;-webkit-tap-highlight-color:transparent}
 .collection-card:active{background:var(--bg3)}
 .collection-icon{width:52px;height:52px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
 .collection-info{flex:1;min-width:0}
-.collection-info h3{font-size:16px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.collection-info h3{font-size:16px;font-weight:600;margin-bottom:3px}
 .collection-info p{font-size:13px;color:var(--dim)}
-.collection-arrow{color:var(--faint);flex-shrink:0}
-.collection-arrow svg{width:20px;height:20px}
+.collection-arrow svg{width:20px;height:20px;color:var(--faint)}
 
-/* ============================================================
-   LIST SCREEN
-============================================================ */
+/* LIST */
 #screen-list{background:var(--bg)}
-.header{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top,0px));background:var(--bg2);border-bottom:1px solid var(--rule)}
-.header-back{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);background:var(--bg3);flex-shrink:0}
-.header-back svg{width:20px;height:20px;color:var(--bone)}
+.header{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:14px 16px;padding-top:calc(12px + var(--safe-top));background:var(--bg2);border-bottom:1px solid var(--rule)}
+.header-back{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);background:var(--bg3);flex-shrink:0;cursor:pointer}
+.header-back:active{background:var(--bg4)}
+.header-back svg{width:20px;height:20px}
 .header-title{flex:1;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.header-add{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);background:var(--gold);flex-shrink:0}
+.header-add{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);background:var(--gold);flex-shrink:0;cursor:pointer}
+.header-add:active{opacity:.8}
 .header-add svg{width:22px;height:22px;color:#1a1208}
-.header-add:active{background:var(--gold2)}
 
 .list-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px calc(16px + var(--safe-bottom))}
 .list-empty{text-align:center;padding:60px 20px;color:var(--dim)}
-.list-empty svg{width:56px;height:56px;opacity:.3;margin:0 auto 16px}
+.list-empty svg{width:52px;height:52px;opacity:.3;margin:0 auto 16px}
 .list-empty h3{font-size:18px;font-weight:600;color:var(--bone);margin-bottom:8px}
 .list-empty p{font-size:14px;line-height:1.6}
 
 .piece-row{background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r);margin-bottom:10px;overflow:hidden;display:flex;align-items:stretch}
 .piece-row-thumb{width:72px;flex-shrink:0;background:var(--bg3)}
-.piece-row-thumb img{width:100%;height:100%;object-fit:cover}
-.piece-row-body{flex:1;padding:12px 14px;min-width:0;cursor:pointer}
+.piece-row-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.piece-row-body{flex:1;padding:12px 14px;min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .piece-row-body:active{background:var(--bg3)}
-.piece-row-name{font-size:15px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.piece-row-meta{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.piece-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.04em}
+.piece-row-name{font-size:15px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.piece-row-meta{font-size:12px;color:var(--dim);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.03em}
 .badge-featured{background:rgba(201,166,107,.2);color:var(--gold)}
 .badge-sold{background:rgba(90,82,75,.4);color:var(--dim)}
-.badge-available{background:rgba(92,156,122,.2);color:var(--green)}
-.piece-row-del{width:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(209,117,100,.08);border-left:1px solid var(--rule);cursor:pointer}
+.badge-available{background:rgba(92,156,122,.18);color:var(--green)}
+.piece-row-del{width:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(209,117,100,.07);border-left:1px solid var(--rule);cursor:pointer}
 .piece-row-del:active{background:rgba(209,117,100,.2)}
 .piece-row-del svg{width:20px;height:20px;color:var(--red)}
 
-/* ============================================================
-   EDIT SCREEN
-============================================================ */
+/* EDIT */
 #screen-edit{background:var(--bg)}
-.edit-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px;padding-bottom:calc(100px + var(--safe-bottom))}
+.edit-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px;padding-bottom:calc(96px + var(--safe-bottom))}
 
-/* Foto upload */
 .foto-upload{width:100%;aspect-ratio:4/3;border-radius:var(--r);border:2px dashed var(--rule);overflow:hidden;position:relative;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:border-color .2s;margin-bottom:20px}
-.foto-upload:active{border-color:var(--gold)}
-.foto-upload.has-img{border-style:solid;border-color:var(--gold)}
-.foto-upload img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.foto-upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px}
-.foto-upload.has-img .foto-upload-overlay{display:flex}
-.foto-upload-text{font-size:14px;color:var(--dim);font-weight:500;position:relative;z-index:1}
-.foto-upload-icon{color:var(--gold);position:relative;z-index:1}
-.foto-upload-icon svg{width:36px;height:36px}
+.foto-upload.has-img{border-style:solid;border-color:rgba(201,166,107,.5)}
+.foto-upload img.preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.foto-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.foto-upload.has-img .foto-overlay{display:flex}
+.foto-placeholder{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--dim)}
+.foto-placeholder svg{width:36px;height:36px;color:var(--gold)}
+.foto-placeholder span{font-size:14px;font-weight:500}
 .foto-upload input{display:none}
 
 .form-section{margin-bottom:20px}
 .form-section-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
 
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-sm);margin-bottom:10px;cursor:pointer}
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.field input,.field textarea{width:100%;padding:14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none;transition:border-color .2s}
+.field input:focus,.field textarea:focus{border-color:var(--gold)}
+.field textarea{min-height:80px;resize:none;line-height:1.5}
+
+.select-wrap{position:relative}
+.select-wrap select{width:100%;padding:14px 44px 14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.select-wrap select:focus{border-color:var(--gold)}
+.select-wrap::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--dim);pointer-events:none}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--bg2);border:1px solid var(--rule);border-radius:var(--r-sm);margin-bottom:10px;cursor:pointer;-webkit-tap-highlight-color:transparent;gap:16px}
 .toggle-row:active{background:var(--bg3)}
-.toggle-row-label{font-size:15px;font-weight:500}
-.toggle-row-sub{font-size:12px;color:var(--dim);margin-top:2px}
-.toggle-switch{width:50px;height:28px;background:var(--bg4);border-radius:14px;position:relative;transition:background .2s;flex-shrink:0;border:1.5px solid var(--rule)}
-.toggle-switch::after{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:var(--dim);border-radius:50%;transition:all .2s}
-.toggle-row.on .toggle-switch{background:rgba(201,166,107,.3);border-color:var(--gold)}
-.toggle-row.on .toggle-switch::after{left:calc(100% - 23px);background:var(--gold)}
+.toggle-left{flex:1;min-width:0}
+.toggle-label{font-size:15px;font-weight:500}
+.toggle-sub{font-size:12px;color:var(--dim);margin-top:2px}
+.toggle-sw{width:50px;height:28px;background:var(--bg4);border-radius:14px;position:relative;transition:background .25s;flex-shrink:0;border:1.5px solid var(--rule)}
+.toggle-sw::after{content:'';position:absolute;left:3px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:var(--dim);border-radius:50%;transition:all .25s}
+.toggle-row.on .toggle-sw{background:rgba(201,166,107,.25);border-color:var(--gold)}
+.toggle-row.on .toggle-sw::after{left:calc(100% - 23px);background:var(--gold)}
 
-/* Floating save */
-.float-save{position:fixed;left:0;right:0;bottom:0;padding:12px 16px;padding-bottom:calc(12px + var(--safe-bottom));background:var(--bg);border-top:1px solid var(--rule);z-index:50;display:flex;gap:10px}
-.float-save .btn{flex:1}
+/* FLOAT SAVE */
+.float-save{position:fixed;bottom:0;left:0;right:0;padding:10px 16px;padding-bottom:calc(10px + var(--safe-bottom));background:var(--bg2);border-top:1px solid var(--rule);z-index:50;display:flex;gap:10px;backdrop-filter:blur(8px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;font-size:15px;font-weight:600;border:none;border-radius:var(--r-sm);cursor:pointer;width:100%;letter-spacing:.01em;-webkit-tap-highlight-color:transparent}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-primary{background:var(--gold);color:#1a1208}
+.btn-primary:active{background:var(--gold2)}
+.btn-ghost{background:transparent;color:var(--dim);border:1.5px solid var(--rule)}
+.btn-ghost:active{background:var(--bg3)}
+.btn-danger{background:rgba(209,117,100,.12);color:var(--red);border:1.5px solid rgba(209,117,100,.25)}
+.btn-danger:active{background:rgba(209,117,100,.22)}
+.btn-sm{padding:10px 16px;font-size:14px;max-width:110px}
 
-/* ============================================================
-   LOADING / TOAST
-============================================================ */
-.spinner{width:22px;height:22px;border:2.5px solid rgba(201,166,107,.25);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.toast{position:fixed;top:calc(20px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%) translateY(-80px);background:var(--bg2);border:1.5px solid var(--gold);color:var(--bone);padding:12px 20px;border-radius:var(--r);font-size:14px;font-weight:500;z-index:999;transition:transform .35s;white-space:nowrap;max-width:90vw;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.4)}
-.toast.error{border-color:var(--red);color:var(--red)}
+/* TOAST */
+.toast{position:fixed;top:calc(16px + var(--safe-top));left:50%;transform:translateX(-50%) translateY(-90px);background:var(--bg2);border:1.5px solid var(--gold);color:var(--bone);padding:12px 18px;border-radius:var(--r);font-size:14px;font-weight:500;z-index:999;transition:transform .3s;white-space:nowrap;max-width:90vw;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.toast.err{border-color:var(--red);color:var(--red)}
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast svg{width:18px;height:18px;flex-shrink:0}
+.toast svg{width:16px;height:16px;flex-shrink:0}
 
-.fullscreen-loader{position:fixed;inset:0;background:rgba(15,13,12,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:999;backdrop-filter:blur(4px)}
-.fullscreen-loader p{font-size:14px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
-.fullscreen-loader .spinner{width:36px;height:36px;border-width:3px}
+/* LOADER */
+.loader-overlay{position:fixed;inset:0;background:rgba(15,13,12,.82);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:1000;backdrop-filter:blur(6px)}
+.spinner{width:36px;height:36px;border:3px solid rgba(201,166,107,.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+.loader-overlay p{font-size:13px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
 
-/* ============================================================
-   CONFIRM DIALOG
-============================================================ */
-.dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:998;display:flex;align-items:flex-end;padding-bottom:env(safe-area-inset-bottom,0px);backdrop-filter:blur(4px)}
+/* DIALOG */
+.dialog-wrap{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:999;display:flex;align-items:flex-end;backdrop-filter:blur(4px);padding-bottom:var(--safe-bottom)}
 .dialog-box{background:var(--bg2);border-radius:var(--r) var(--r) 0 0;padding:28px 20px;width:100%;max-width:500px;margin:0 auto;border-top:1.5px solid var(--rule)}
 .dialog-box h3{font-size:18px;font-weight:700;margin-bottom:8px;text-align:center}
 .dialog-box p{font-size:14px;color:var(--dim);text-align:center;margin-bottom:24px;line-height:1.6}
 .dialog-btns{display:flex;flex-direction:column;gap:10px}
-
-/* ============================================================
-   SELECT custom
-============================================================ */
-.select-wrap{position:relative}
-.select-wrap select{width:100%;padding:14px 44px 14px 16px;background:var(--bg3);border:1.5px solid var(--rule);border-radius:var(--r-sm);font-size:16px;color:var(--bone);transition:border-color .2s;outline:none;cursor:pointer}
-.select-wrap select:focus{border-color:var(--gold)}
-.select-wrap::after{content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--dim);pointer-events:none}
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     SETUP SCREEN
-============================================================ -->
-<div class="screen active" id="screen-setup">
-<div class="setup-inner">
-  <div class="setup-logo"><img src="/images/logo-gold.png" alt="D'Fantato"/></div>
-  <h1 class="setup-title">Painel Admin</h1>
-  <p class="setup-sub">Configure uma vez e use para sempre no seu celular.</p>
-
-  <div class="setup-step">
-    <h3><span>1</span> Repositório GitHub</h3>
-    <div class="field">
-      <label>Usuário GitHub</label>
-      <input id="cfg-owner" type="text" placeholder="ex: gabrielfantato" autocapitalize="none" autocorrect="off" spellcheck="false"/>
-    </div>
-    <div class="field">
-      <label>Nome do Repositório</label>
-      <input id="cfg-repo" type="text" placeholder="ex: dfantato-wood" autocapitalize="none" autocorrect="off" spellcheck="false"/>
-    </div>
-  </div>
-
-  <div class="setup-step">
-    <h3><span>2</span> Token de Acesso</h3>
-    <div class="field">
-      <label>Personal Access Token</label>
-      <input id="cfg-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocapitalize="none" autocorrect="off" spellcheck="false"/>
-      <small>Gere em: <a href="https://github.com/settings/tokens/new?scopes=repo&description=DFantato+Admin" target="_blank">github.com → Settings → Tokens</a><br/>Precisa ter permissão <strong>repo</strong> marcada.</small>
-    </div>
-  </div>
-
-  <div class="setup-step">
-    <h3><span>3</span> Senha Admin</h3>
-    <div class="field">
-      <label>Senha de acesso ao painel</label>
-      <input id="cfg-pin" type="password" placeholder="Crie uma senha" autocomplete="new-password"/>
-      <small>Protege o painel no seu celular. Pode ser simples.</small>
-    </div>
-  </div>
-
-  <div style="margin-top:24px">
-    <button class="btn btn-primary" onclick="salvarConfig()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
-      Salvar e Entrar
-    </button>
-  </div>
-  <p style="font-size:12px;color:var(--faint);text-align:center;margin-top:16px">Suas configurações ficam salvas só neste aparelho.</p>
-</div>
+<!-- LOADING -->
+<div class="screen active" id="screen-loading">
+  <div class="spinner-big"></div>
+  <p style="font-size:14px;color:var(--dim)">Verificando acesso...</p>
 </div>
 
-<!-- ============================================================
-     LOGIN SCREEN
-============================================================ -->
+<!-- LOGIN -->
 <div class="screen" id="screen-login">
-<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px">
-  <img src="/images/logo-gold.png" style="width:140px;margin-bottom:32px;filter:invert(1) sepia(1) saturate(.5) brightness(1.2)" alt=""/>
-  <h2 style="font-size:20px;font-weight:700;margin-bottom:24px">Entrar no Admin</h2>
-  <div class="field" style="width:100%;max-width:360px">
-    <label>Senha</label>
-    <input id="login-pin" type="password" placeholder="Digite sua senha" autocomplete="current-password"
-      onkeydown="if(event.key==='Enter')fazerLogin()"/>
+  <div class="inner">
+    <img class="login-logo" src="/images/logo-gold.png" alt="D'Fantato"/>
+    <div>
+      <div class="login-title">Painel Admin</div>
+      <div class="login-sub" style="margin-top:6px">Acesse com sua conta Google ou e-mail</div>
+    </div>
+
+    <!-- Usuário já logado (mostra info) -->
+    <div class="login-user" id="login-user">
+      <div class="login-user-info">
+        <div class="login-avatar" id="login-avatar">?</div>
+        <div>
+          <div class="login-name" id="login-name"></div>
+          <div class="login-email-text" id="login-email-text"></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="entrarNoAdmin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+        Entrar no Admin
+      </button>
+      <button class="btn btn-ghost" style="font-size:13px" onclick="netlifyIdentity.logout()">Sair desta conta</button>
+    </div>
+
+    <!-- Botões de login -->
+    <div id="login-btns" style="width:100%;display:flex;flex-direction:column;gap:12px">
+      <button class="btn-google" onclick="netlifyIdentity.open('login')">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234285F4' d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'/%3E%3Cpath fill='%2334A853' d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z'/%3E%3Cpath fill='%23FBBC05' d='M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z'/%3E%3Cpath fill='%23EA4335' d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z'/%3E%3C/svg%3E" alt="Google"/>
+        Entrar com Google
+      </button>
+      <div class="login-or">ou</div>
+      <button class="btn-email" onclick="netlifyIdentity.open('login')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        Entrar com E-mail
+      </button>
+    </div>
   </div>
-  <button class="btn btn-primary" style="max-width:360px;margin-top:8px" onclick="fazerLogin()">Entrar</button>
-  <button class="btn btn-ghost" style="max-width:360px;margin-top:10px;font-size:13px" onclick="mostrarSetup()">Reconfigurar</button>
-</div>
 </div>
 
-<!-- ============================================================
-     HOME SCREEN
-============================================================ -->
+<!-- HOME -->
 <div class="screen" id="screen-home">
   <div class="topbar">
     <div class="topbar-brand">
       <img src="/images/logo-gold.png" alt=""/>
       <span>Admin</span>
     </div>
-    <div class="topbar-right">
-      <div class="icon-btn" onclick="fazerLogout()" title="Sair">
+    <div class="topbar-user">
+      <div class="topbar-avatar" id="topbar-avatar"></div>
+      <div class="icon-btn" onclick="confirmarLogout()" title="Sair">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
       </div>
     </div>
   </div>
   <div class="home-scroll">
     <div class="home-greeting">
-      <h1>Olá 👋</h1>
+      <h1 id="home-greeting-name">Olá 👋</h1>
       <p>Escolha uma coleção para gerenciar</p>
     </div>
     <div id="collection-list"></div>
   </div>
 </div>
 
-<!-- ============================================================
-     LIST SCREEN
-============================================================ -->
+<!-- LIST -->
 <div class="screen" id="screen-list">
   <div class="header">
     <div class="header-back" onclick="voltarHome()">
@@ -307,16 +268,10 @@ input[type="checkbox"]{-webkit-appearance:checkbox;appearance:checkbox;width:20p
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
     </div>
   </div>
-  <div class="list-scroll" id="list-scroll">
-    <div class="list-empty">
-      <div class="spinner" style="margin:0 auto 20px"></div>
-    </div>
-  </div>
+  <div class="list-scroll" id="list-scroll"></div>
 </div>
 
-<!-- ============================================================
-     EDIT SCREEN
-============================================================ -->
+<!-- EDIT -->
 <div class="screen" id="screen-edit">
   <div class="header">
     <div class="header-back" onclick="voltarLista()">
@@ -327,82 +282,69 @@ input[type="checkbox"]{-webkit-appearance:checkbox;appearance:checkbox;width:20p
   </div>
 
   <div class="edit-scroll" id="edit-scroll">
-
     <!-- FOTO -->
-    <label class="foto-upload" id="foto-upload" onclick="document.getElementById('foto-input').click()">
-      <img id="foto-preview" src="" alt="" style="display:none"/>
-      <div class="foto-upload-overlay">
-        <div class="foto-upload-icon" style="background:rgba(0,0,0,.5);border-radius:50%;padding:10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg></div>
-        <span style="color:#fff;font-size:13px">Trocar foto</span>
+    <div class="foto-upload" id="foto-box" onclick="document.getElementById('foto-input').click()">
+      <img class="preview" id="foto-preview" src="" style="display:none"/>
+      <div class="foto-overlay">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="32" height="32"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>
+        <span style="color:#fff;font-size:13px;font-weight:500">Trocar foto</span>
       </div>
-      <div class="foto-upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg></div>
-      <div class="foto-upload-text">Toque para escolher a foto</div>
+      <div class="foto-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        <span>Toque para escolher a foto</span>
+      </div>
       <input id="foto-input" type="file" accept="image/*" onchange="selecionarFoto(this)"/>
-    </label>
+    </div>
 
-    <!-- CAMPOS PRINCIPAIS -->
     <div class="form-section">
-      <div class="form-section-title">Informações da Peça</div>
-
+      <div class="form-section-title">Informações</div>
       <div class="field">
         <label>Nome da Peça *</label>
         <input id="f-titulo" type="text" placeholder="Ex: Bowl Raízes" autocapitalize="words"/>
       </div>
-
-      <div class="field" id="field-categoria">
+      <div class="field" id="field-categoria" style="display:none">
         <label>Categoria *</label>
-        <div class="select-wrap">
-          <select id="f-categoria"></select>
-        </div>
+        <div class="select-wrap"><select id="f-categoria"></select></div>
       </div>
-
-      <div class="field" id="field-material-wrap">
+      <div class="field">
         <label id="label-material">Tipo de Madeira</label>
         <input id="f-material" type="text" placeholder="Ex: Imbuia recuperada" autocapitalize="words"/>
       </div>
-
       <div class="field">
         <label>Descrição</label>
         <textarea id="f-descricao" placeholder="Conta a história da peça..." rows="3"></textarea>
       </div>
-
       <div class="field">
-        <label>Preço (R$) — deixe vazio para "sob consulta"</label>
+        <label>Preço (R$) — vazio = sob consulta</label>
         <input id="f-preco" type="number" inputmode="decimal" placeholder="0,00" min="0" step="0.01"/>
       </div>
     </div>
 
-    <!-- TOGGLES -->
     <div class="form-section">
       <div class="form-section-title">Configurações</div>
-
-      <div class="toggle-row" id="toggle-disponivel" onclick="toggleRow('toggle-disponivel')">
-        <div>
-          <div class="toggle-row-label">Disponível para venda</div>
-          <div class="toggle-row-sub">Quando vendida, aparece com selo "Vendida"</div>
+      <div class="toggle-row on" id="toggle-disponivel" onclick="toggleRow('toggle-disponivel')">
+        <div class="toggle-left">
+          <div class="toggle-label">Disponível para venda</div>
+          <div class="toggle-sub">Desative quando a peça for vendida</div>
         </div>
-        <div class="toggle-switch"></div>
+        <div class="toggle-sw"></div>
       </div>
-
-      <div class="toggle-row" id="toggle-destaque" onclick="toggleRow('toggle-destaque')">
-        <div>
-          <div class="toggle-row-label">⭐ Em Destaque</div>
-          <div class="toggle-row-sub">Aparece em primeiro no site</div>
+      <div class="toggle-row" id="toggle-destaque" onclick="toggleRow('toggle-destaque')" style="display:none">
+        <div class="toggle-left">
+          <div class="toggle-label">⭐ Em Destaque</div>
+          <div class="toggle-sub">Aparece primeiro no site</div>
         </div>
-        <div class="toggle-switch"></div>
+        <div class="toggle-sw"></div>
       </div>
-
       <div class="field" id="field-ordem" style="display:none">
-        <label>Ordem do destaque (1 = primeiro)</label>
+        <label>Ordem (1 = primeiro)</label>
         <input id="f-ordem" type="number" inputmode="numeric" placeholder="1" min="1"/>
       </div>
     </div>
-
   </div>
 
-  <!-- FLOATING SAVE BUTTON — sempre visível -->
-  <div class="float-save" id="float-save">
-    <button class="btn btn-ghost btn-sm" id="btn-deletar" onclick="confirmarDelete()" style="display:none;max-width:120px">
+  <div class="float-save">
+    <button class="btn btn-danger btn-sm" id="btn-del" onclick="confirmarDelete()" style="display:none">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
       Excluir
     </button>
@@ -417,18 +359,18 @@ input[type="checkbox"]{-webkit-appearance:checkbox;appearance:checkbox;width:20p
 <div class="toast" id="toast"></div>
 
 <!-- LOADER -->
-<div class="fullscreen-loader" id="loader" style="display:none">
+<div class="loader-overlay" id="loader" style="display:none">
   <div class="spinner"></div>
   <p id="loader-msg">Salvando...</p>
 </div>
 
-<!-- CONFIRM DIALOG -->
-<div class="dialog-overlay" id="dialog" style="display:none" onclick="if(event.target===this)fecharDialog()">
+<!-- DIALOG -->
+<div class="dialog-wrap" id="dialog" style="display:none" onclick="if(event.target===this)fecharDialog()">
   <div class="dialog-box">
-    <h3 id="dialog-title">Confirmar</h3>
-    <p id="dialog-msg">Tem certeza?</p>
+    <h3 id="d-title"></h3>
+    <p id="d-msg"></p>
     <div class="dialog-btns">
-      <button class="btn btn-danger" id="dialog-confirm">Excluir</button>
+      <button class="btn btn-danger" id="d-confirm">Confirmar</button>
       <button class="btn btn-ghost" onclick="fecharDialog()">Cancelar</button>
     </div>
   </div>
@@ -436,148 +378,147 @@ input[type="checkbox"]{-webkit-appearance:checkbox;appearance:checkbox;width:20p
 
 <script>
 // ============================================================
-// CONFIGURAÇÃO DE COLEÇÕES
+// COLEÇÕES
 // ============================================================
 const COLECOES = [
-  {
-    id: 'pecas',
-    nome: "D'Fantato Wood",
-    desc: 'Peças em madeira nobre recuperada',
-    icon: '🪵',
-    pasta: 'pecas',
-    categorias: ['Esculturas','Obras Decorativas','Bowls e Travessas','Tábuas e Acessórios'],
-    campo_material: 'tipo_madeira',
-    label_material: 'Tipo de Madeira',
-    tem_destaque: true,
-  },
-  {
-    id: 'japamala',
-    nome: 'Japamala',
-    desc: 'Malas de meditação — Alma em Contas',
-    icon: '📿',
-    pasta: 'japamala',
-    categorias: null,
-    campo_material: 'material',
-    label_material: 'Material / Pedra',
-    tem_destaque: false,
-  },
-  {
-    id: 'alma',
-    nome: 'Pulseiras & Colares',
-    desc: 'Coleção Alma em Contas',
-    icon: '✨',
-    pasta: 'alma',
-    categorias: null,
-    campo_material: 'material',
-    label_material: 'Material / Pedra',
-    tem_destaque: false,
-  },
+  { id:'pecas',    nome:"D'Fantato Wood",     desc:'Peças em madeira nobre recuperada', icon:'🪵', pasta:'pecas',    categorias:['Esculturas','Obras Decorativas','Bowls e Travessas','Tábuas e Acessórios'], campo_mat:'tipo_madeira', label_mat:'Tipo de Madeira',   destaque:true },
+  { id:'japamala', nome:'Japamala',            desc:'Malas de meditação — Alma em Contas', icon:'📿', pasta:'japamala', categorias:null, campo_mat:'material',    label_mat:'Material / Pedra',   destaque:false },
+  { id:'alma',     nome:'Pulseiras & Colares', desc:'Coleção Alma em Contas',             icon:'✨', pasta:'alma',     categorias:null, campo_mat:'material',    label_mat:'Material / Pedra',   destaque:false },
 ];
 
 // ============================================================
 // ESTADO
 // ============================================================
-let CFG = {};
+let currentUser = null;
 let currentColecao = null;
 let currentPecas = [];
 let editingSlug = null;
-let editingFileSha = null;
-let novaFotoBase64 = null;
+let editingSha = null;
+let novaFotoB64 = null;
 let novaFotoNome = null;
+let ghOwner = '', ghRepo = '';
 
 // ============================================================
-// INIT
+// NETLIFY IDENTITY — BOOT
 // ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('df_cfg');
-  if (saved) {
-    try {
-      CFG = JSON.parse(saved);
-      if (CFG.owner && CFG.repo && CFG.token) {
-        mostrarLogin();
-        return;
-      }
-    } catch {}
+netlifyIdentity.on('init', user => {
+  if (user) {
+    currentUser = user;
+    detectarRepo().then(() => entrarNoAdmin());
+  } else {
+    mostrarTela('screen-login');
   }
-  mostrarSetup();
+});
+
+netlifyIdentity.on('login', user => {
+  currentUser = user;
+  netlifyIdentity.close();
+  detectarRepo().then(() => entrarNoAdmin());
+});
+
+netlifyIdentity.on('logout', () => {
+  currentUser = null;
+  mostrarTela('screen-login');
+  document.getElementById('login-btns').style.display = 'flex';
+  document.getElementById('login-user').style.display = 'none';
+});
+
+netlifyIdentity.on('error', err => {
+  console.error('Identity error:', err);
+  showToast('Erro de autenticação', 'err');
 });
 
 // ============================================================
-// SETUP
+// DETECTAR REPO (via meta tag do Netlify ou URL)
 // ============================================================
-function mostrarSetup() {
-  // Preenche campos se já tinha config
-  if (CFG.owner) document.getElementById('cfg-owner').value = CFG.owner || '';
-  if (CFG.repo) document.getElementById('cfg-repo').value = CFG.repo || '';
-  mostrarTela('screen-setup');
+async function detectarRepo() {
+  try {
+    // Pega info do git-gateway (a URL do site revela owner/repo)
+    const res = await fetch('/.netlify/identity/settings');
+    const data = await res.json();
+    const ext = data.external_providers || {};
+    // Tenta pegar via git-gateway token
+    const gwRes = await fetch('/.netlify/git/github', {
+      headers: { 'Authorization': `Bearer ${currentUser.token.access_token}` }
+    });
+    // Se não funcionar usa cookie/localStorage
+    const saved = localStorage.getItem('df_repo');
+    if (saved) { const s = JSON.parse(saved); ghOwner = s.o; ghRepo = s.r; }
+  } catch {}
+  // Se não descobriu automaticamente pede pro usuário
+  if (!ghOwner || !ghRepo) await pedirRepo();
 }
 
-function salvarConfig() {
-  const owner = document.getElementById('cfg-owner').value.trim();
-  const repo = document.getElementById('cfg-repo').value.trim();
-  const token = document.getElementById('cfg-token').value.trim();
-  const pin = document.getElementById('cfg-pin').value;
+async function pedirRepo() {
+  return new Promise(resolve => {
+    const saved = localStorage.getItem('df_repo');
+    if (saved) { try { const s=JSON.parse(saved); if(s.o&&s.r){ghOwner=s.o;ghRepo=s.r;resolve();return;} }catch{} }
+    // Cria modal simples
+    const div = document.createElement('div');
+    div.style.cssText='position:fixed;inset:0;background:#0f0d0c;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:20px';
+    div.innerHTML=`
+      <img src="/images/logo-gold.png" style="width:140px;filter:invert(1) sepia(1) saturate(.5) brightness(1.3)"/>
+      <div style="text-align:center">
+        <div style="font-size:18px;font-weight:700;margin-bottom:6px">Configurar Repositório</div>
+        <div style="font-size:14px;color:#9a8f82;line-height:1.6">Necessário uma única vez para conectar com o GitHub</div>
+      </div>
+      <div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:12px">
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#9a8f82;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:8px">Usuário GitHub</label>
+          <input id="rp-owner" type="text" placeholder="ex: gabrielfantato1" style="width:100%;padding:14px 16px;background:#221e1b;border:1.5px solid rgba(201,166,107,.15);border-radius:8px;font-size:16px;color:#ede3d0;outline:none" autocapitalize="none" autocorrect="off"/>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;color:#9a8f82;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:8px">Nome do Repositório</label>
+          <input id="rp-repo" type="text" placeholder="ex: dfantato-wood" style="width:100%;padding:14px 16px;background:#221e1b;border:1.5px solid rgba(201,166,107,.15);border-radius:8px;font-size:16px;color:#ede3d0;outline:none" autocapitalize="none" autocorrect="off"/>
+        </div>
+        <button onclick="salvarRepo()" style="padding:16px;background:#c9a66b;color:#1a1208;font-size:15px;font-weight:700;border:none;border-radius:8px;cursor:pointer;width:100%;margin-top:4px">Salvar e Continuar</button>
+      </div>
+    `;
+    document.body.appendChild(div);
+    window._resolveRepo = () => { document.body.removeChild(div); resolve(); };
+  });
+}
 
-  if (!owner || !repo || !token) {
-    showToast('Preencha usuário, repositório e token', 'error');
-    return;
-  }
-  if (!pin) {
-    showToast('Crie uma senha para o painel', 'error');
-    return;
-  }
-
-  CFG = { owner, repo, token, pin };
-  localStorage.setItem('df_cfg', JSON.stringify(CFG));
-  mostrarHome();
+function salvarRepo() {
+  const o = document.getElementById('rp-owner')?.value.trim();
+  const r = document.getElementById('rp-repo')?.value.trim();
+  if (!o || !r) { showToast('Preencha os dois campos', 'err'); return; }
+  ghOwner = o; ghRepo = r;
+  localStorage.setItem('df_repo', JSON.stringify({o, r}));
+  window._resolveRepo?.();
 }
 
 // ============================================================
-// LOGIN
+// ENTRAR NO ADMIN
 // ============================================================
-function mostrarLogin() {
-  mostrarTela('screen-login');
-  setTimeout(() => document.getElementById('login-pin').focus(), 300);
-}
+function entrarNoAdmin() {
+  const user = currentUser;
+  const nome = user.user_metadata?.full_name || user.email.split('@')[0];
+  const primeiroNome = nome.split(' ')[0];
 
-function fazerLogin() {
-  const pin = document.getElementById('login-pin').value;
-  if (pin === CFG.pin) {
-    document.getElementById('login-pin').value = '';
-    mostrarHome();
-  } else {
-    showToast('Senha incorreta', 'error');
-    document.getElementById('login-pin').value = '';
-    document.getElementById('login-pin').focus();
-  }
-}
+  // Topbar avatar
+  const av = document.getElementById('topbar-avatar');
+  const avImg = user.user_metadata?.avatar_url;
+  if (avImg) av.innerHTML = `<img src="${avImg}" alt=""/>`;
+  else av.textContent = primeiroNome[0].toUpperCase();
 
-function fazerLogout() {
-  mostrarLogin();
-}
+  // Home greeting
+  document.getElementById('home-greeting-name').textContent = `Olá, ${primeiroNome} 👋`;
 
-// ============================================================
-// HOME
-// ============================================================
-function mostrarHome() {
+  // Collections list
   const list = document.getElementById('collection-list');
   list.innerHTML = COLECOES.map(c => `
     <div class="collection-card" onclick="abrirColecao('${c.id}')">
       <div class="collection-icon" style="background:rgba(201,166,107,.1)">${c.icon}</div>
-      <div class="collection-info">
-        <h3>${c.nome}</h3>
-        <p>${c.desc}</p>
-      </div>
-      <div class="collection-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
-    </div>
-  `).join('');
+      <div class="collection-info"><h3>${c.nome}</h3><p>${c.desc}</p></div>
+      <div class="collection-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+    </div>`).join('');
+
   mostrarTela('screen-home');
 }
 
 // ============================================================
-// LISTA DE PEÇAS
+// LISTA
 // ============================================================
 async function abrirColecao(id) {
   currentColecao = COLECOES.find(c => c.id === id);
@@ -587,542 +528,347 @@ async function abrirColecao(id) {
 }
 
 async function carregarLista() {
-  const scroll = document.getElementById('list-scroll');
-  scroll.innerHTML = `<div class="list-empty"><div class="spinner" style="margin:0 auto 16px"></div><p>Carregando...</p></div>`;
-
+  const el = document.getElementById('list-scroll');
+  el.innerHTML = `<div class="list-empty"><div class="spinner" style="margin:0 auto 16px;width:24px;height:24px;border-width:2px"></div><p>Carregando...</p></div>`;
   try {
     const files = await ghListFiles(currentColecao.pasta);
-    const mdFiles = files.filter(f => f.name.endsWith('.md'));
+    const mds = files.filter(f => f.name.endsWith('.md'));
+    if (!mds.length) { el.innerHTML = emptyHtml(); currentPecas = []; return; }
+    const all = await Promise.all(mds.map(async f => {
+      const c = await ghGetFile(currentColecao.pasta + '/' + f.name);
+      const fm = parseFM(c.decoded);
+      return { slug: f.name.replace('.md',''), sha: c.sha, ...fm };
+    }));
+    currentPecas = all;
+    renderLista(all);
+  } catch(e) { el.innerHTML = `<div class="list-empty"><h3>Erro</h3><p>${e.message}</p></div>`; }
+}
 
-    if (mdFiles.length === 0) {
-      scroll.innerHTML = `
-        <div class="list-empty">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          <h3>Nenhuma peça ainda</h3>
-          <p>Toque no + para adicionar a primeira peça</p>
-        </div>`;
-      currentPecas = [];
-      return;
-    }
-
-    // Carrega conteúdo de cada arquivo
-    const pecasPromises = mdFiles.map(async f => {
-      const content = await ghGetFile(currentColecao.pasta + '/' + f.name);
-      const fm = parseFrontmatter(content.decoded);
-      return { slug: f.name.replace('.md',''), sha: content.sha, ...fm };
-    });
-
-    currentPecas = await Promise.all(pecasPromises);
-    renderLista(currentPecas);
-  } catch(e) {
-    console.error(e);
-    scroll.innerHTML = `<div class="list-empty"><h3>Erro ao carregar</h3><p>${e.message}</p></div>`;
-  }
+function emptyHtml() {
+  return `<div class="list-empty">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    <h3>Nenhuma peça</h3><p>Toque em + para adicionar</p></div>`;
 }
 
 function renderLista(pecas) {
-  const scroll = document.getElementById('list-scroll');
-  if (pecas.length === 0) {
-    scroll.innerHTML = `
-      <div class="list-empty">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        <h3>Nenhuma peça ainda</h3>
-        <p>Toque no + para adicionar a primeira peça</p>
-      </div>`;
-    return;
-  }
-
-  scroll.innerHTML = pecas.map(p => {
-    const foto = p.foto ? `<img src="${esc(resolverFotoUrl(p.foto))}" loading="lazy" onerror="this.style.display='none'"/>` : '';
+  const el = document.getElementById('list-scroll');
+  if (!pecas.length) { el.innerHTML = emptyHtml(); return; }
+  el.innerHTML = pecas.map(p => {
+    const foto = p.foto ? resolverFoto(p.foto) : '';
+    const thumb = foto ? `<img src="${esc(foto)}" loading="lazy" onerror="this.style.display='none'"/>` : '';
     const badges = [];
-    if (p.vendida) badges.push(`<span class="piece-badge badge-sold">Vendida</span>`);
-    else badges.push(`<span class="piece-badge badge-available">Disponível</span>`);
-    if (p.destaque) badges.push(`<span class="piece-badge badge-featured">⭐ Destaque</span>`);
-
-    const meta = p[currentColecao.campo_material] || p.categoria || '';
-
-    return `
-      <div class="piece-row">
-        <div class="piece-row-thumb">${foto}</div>
-        <div class="piece-row-body" onclick="editarPeca('${esc(p.slug)}')">
-          <div class="piece-row-name">${esc(p.titulo||p.slug)}</div>
-          <div class="piece-row-meta">${badges.join('')}${meta?`<span>${esc(meta)}</span>`:''}</div>
-        </div>
-        <div class="piece-row-del" onclick="confirmarDeleteDireto('${esc(p.slug)}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
-        </div>
-      </div>`;
+    if (p.vendida) badges.push(`<span class="badge badge-sold">Vendida</span>`);
+    else badges.push(`<span class="badge badge-available">Disponível</span>`);
+    if (p.destaque) badges.push(`<span class="badge badge-featured">⭐</span>`);
+    const meta = p[currentColecao.campo_mat] || p.categoria || '';
+    return `<div class="piece-row">
+      <div class="piece-row-thumb">${thumb}</div>
+      <div class="piece-row-body" onclick="editarPeca('${esc(p.slug)}')">
+        <div class="piece-row-name">${esc(p.titulo||p.slug)}</div>
+        <div class="piece-row-meta">${badges.join('')}${meta?`<span>${esc(meta)}</span>`:''}</div>
+      </div>
+      <div class="piece-row-del" onclick="delDireto('${esc(p.slug)}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function resolverFotoUrl(foto) {
-  if (!foto) return '';
-  if (foto.startsWith('http')) return foto;
-  // Relative path like /images/xxx.png — use GitHub raw
-  return `https://raw.githubusercontent.com/${CFG.owner}/${CFG.repo}/main${foto}`;
+function resolverFoto(f) {
+  if (!f) return '';
+  if (f.startsWith('http')) return f;
+  return `https://raw.githubusercontent.com/${ghOwner}/${ghRepo}/main${f}`;
 }
 
 // ============================================================
 // EDIÇÃO
 // ============================================================
 function novaPeca() {
-  editingSlug = null;
-  editingFileSha = null;
-  novaFotoBase64 = null;
-  novaFotoNome = null;
-
+  editingSlug = null; editingSha = null;
+  novaFotoB64 = null; novaFotoNome = null;
   document.getElementById('edit-title').textContent = 'Nova Peça';
-  document.getElementById('btn-deletar').style.display = 'none';
-
-  // Reset form
+  document.getElementById('btn-del').style.display = 'none';
   document.getElementById('f-titulo').value = '';
   document.getElementById('f-material').value = '';
   document.getElementById('f-descricao').value = '';
   document.getElementById('f-preco').value = '';
   document.getElementById('f-ordem').value = '';
-
-  setToggle('toggle-disponivel', true);
-  setToggle('toggle-destaque', false);
+  document.getElementById('foto-preview').style.display = 'none';
+  document.getElementById('foto-box').classList.remove('has-img');
+  setOn('toggle-disponivel', true);
+  setOn('toggle-destaque', false);
   document.getElementById('field-ordem').style.display = 'none';
-
-  resetFoto();
-  configurarCamposColecao();
-
+  configurarCampos();
   mostrarTela('screen-edit');
   document.getElementById('edit-scroll').scrollTop = 0;
 }
 
 async function editarPeca(slug) {
-  const peca = currentPecas.find(p => p.slug === slug);
-  if (!peca) return;
-
-  editingSlug = slug;
-  editingFileSha = peca.sha;
-  novaFotoBase64 = null;
-  novaFotoNome = null;
-
+  const p = currentPecas.find(x => x.slug === slug);
+  if (!p) return;
+  editingSlug = slug; editingSha = p.sha;
+  novaFotoB64 = null; novaFotoNome = null;
   document.getElementById('edit-title').textContent = 'Editar Peça';
-  document.getElementById('btn-deletar').style.display = '';
-
-  document.getElementById('f-titulo').value = peca.titulo || '';
-  document.getElementById('f-material').value = peca[currentColecao.campo_material] || '';
-  document.getElementById('f-descricao').value = peca.descricao || '';
-  document.getElementById('f-preco').value = peca.preco || '';
-  document.getElementById('f-ordem').value = peca.ordem_destaque || '';
-
-  setToggle('toggle-disponivel', peca.vendida !== true);
-  setToggle('toggle-destaque', peca.destaque === true);
-  document.getElementById('field-ordem').style.display = peca.destaque ? '' : 'none';
-
-  // Foto preview
-  if (peca.foto) {
-    const url = resolverFotoUrl(peca.foto);
-    const preview = document.getElementById('foto-preview');
-    preview.src = url;
-    preview.style.display = 'block';
-    document.getElementById('foto-upload').classList.add('has-img');
+  document.getElementById('btn-del').style.display = '';
+  document.getElementById('f-titulo').value = p.titulo || '';
+  document.getElementById('f-material').value = p[currentColecao.campo_mat] || '';
+  document.getElementById('f-descricao').value = p.descricao || '';
+  document.getElementById('f-preco').value = p.preco || '';
+  document.getElementById('f-ordem').value = p.ordem_destaque || '';
+  setOn('toggle-disponivel', !p.vendida);
+  setOn('toggle-destaque', !!p.destaque);
+  document.getElementById('field-ordem').style.display = p.destaque ? '' : 'none';
+  if (p.foto) {
+    const prev = document.getElementById('foto-preview');
+    prev.src = resolverFoto(p.foto); prev.style.display = 'block';
+    document.getElementById('foto-box').classList.add('has-img');
   } else {
-    resetFoto();
+    document.getElementById('foto-preview').style.display = 'none';
+    document.getElementById('foto-box').classList.remove('has-img');
   }
-
-  configurarCamposColecao();
-  if (document.getElementById('f-categoria')) {
-    document.getElementById('f-categoria').value = peca.categoria || '';
-  }
-
+  configurarCampos();
+  if (currentColecao.categorias && p.categoria) document.getElementById('f-categoria').value = p.categoria;
   mostrarTela('screen-edit');
   document.getElementById('edit-scroll').scrollTop = 0;
 }
 
-function configurarCamposColecao() {
+function configurarCampos() {
   const col = currentColecao;
-
-  // Label do material
-  document.getElementById('label-material').textContent = col.label_material;
+  document.getElementById('label-material').textContent = col.label_mat;
   document.getElementById('f-material').placeholder = col.id === 'pecas' ? 'Ex: Imbuia recuperada' : 'Ex: Ametista, Quartzo Rosa';
-
-  // Categoria (só D'Fantato tem categoria)
-  const fieldCat = document.getElementById('field-categoria');
+  const fc = document.getElementById('field-categoria');
   if (col.categorias) {
-    fieldCat.style.display = '';
-    const sel = document.getElementById('f-categoria');
-    sel.innerHTML = col.categorias.map(c => `<option value="${c}">${c}</option>`).join('');
-  } else {
-    fieldCat.style.display = 'none';
-  }
-
-  // Destaque (só D'Fantato)
-  const rowDest = document.getElementById('toggle-destaque');
-  rowDest.style.display = col.tem_destaque ? '' : 'none';
-  document.getElementById('field-ordem').style.display = 'none';
+    fc.style.display = '';
+    document.getElementById('f-categoria').innerHTML = col.categorias.map(c => `<option>${c}</option>`).join('');
+  } else fc.style.display = 'none';
+  document.getElementById('toggle-destaque').style.display = col.destaque ? '' : 'none';
 }
 
 async function salvarPeca() {
   const titulo = document.getElementById('f-titulo').value.trim();
-  if (!titulo) {
-    showToast('Nome da peça é obrigatório', 'error');
-    document.getElementById('f-titulo').focus();
-    return;
-  }
-
-  showLoader('Salvando peça...');
-
+  if (!titulo) { showToast('Nome obrigatório', 'err'); document.getElementById('f-titulo').focus(); return; }
+  showLoader('Salvando...');
   try {
     const col = currentColecao;
-    const disponivel = isToggleOn('toggle-disponivel');
-    const destaque = col.tem_destaque && isToggleOn('toggle-destaque');
-    const preco = parseFloat(document.getElementById('f-preco').value) || null;
-    const ordem = parseInt(document.getElementById('f-ordem').value) || 0;
-
     let fotoPath = null;
-
-    // Upload foto se tiver nova
-    if (novaFotoBase64) {
+    if (novaFotoB64) {
       showLoader('Enviando foto...');
-      const ext = novaFotoNome.split('.').pop().toLowerCase() || 'jpg';
-      const ts = Date.now();
-      const fotoNome = `${slugify(titulo)}-${ts}.${ext}`;
-      const fotoGhPath = `images/uploads/${fotoNome}`;
-
-      await ghPutFile(fotoGhPath, novaFotoBase64, `Foto: ${titulo}`);
-      fotoPath = `/images/uploads/${fotoNome}`;
+      const ext = (novaFotoNome||'img').replace(/.*\./,'') || 'jpg';
+      const nome = `${slugify(titulo)}-${Date.now()}.${ext}`;
+      await ghPutFile(`images/uploads/${nome}`, novaFotoB64, `Foto: ${titulo}`);
+      fotoPath = `/images/uploads/${nome}`;
     } else if (editingSlug) {
-      // Mantém foto existente
-      const peca = currentPecas.find(p => p.slug === editingSlug);
-      fotoPath = peca?.foto || null;
+      fotoPath = currentPecas.find(p => p.slug === editingSlug)?.foto || null;
     }
-
-    // Monta frontmatter
     const fields = {
-      titulo,
-      foto: fotoPath || '',
-      [col.campo_material]: document.getElementById('f-material').value.trim() || null,
-      descricao: document.getElementById('f-descricao').value.trim() || null,
-      preco,
-      vendida: !disponivel,
+      titulo, foto: fotoPath||'',
+      [col.campo_mat]: document.getElementById('f-material').value.trim()||null,
+      descricao: document.getElementById('f-descricao').value.trim()||null,
+      preco: parseFloat(document.getElementById('f-preco').value)||null,
+      vendida: !isOn('toggle-disponivel'),
     };
-
-    if (col.categorias) {
-      fields.categoria = document.getElementById('f-categoria').value;
+    if (col.categorias) fields.categoria = document.getElementById('f-categoria').value;
+    if (col.destaque) {
+      fields.destaque = isOn('toggle-destaque');
+      if (fields.destaque) fields.ordem_destaque = parseInt(document.getElementById('f-ordem').value)||1;
     }
-    if (col.tem_destaque) {
-      fields.destaque = destaque;
-      if (destaque) fields.ordem_destaque = ordem;
-    }
-
-    const slug = editingSlug || slugify(titulo) + '-' + Date.now();
-    const conteudo = buildMarkdown(fields);
-    const filePath = `${col.pasta}/${slug}.md`;
-
-    showLoader('Publicando no site...');
-    await ghPutFile(
-      filePath,
-      btoa(unescape(encodeURIComponent(conteudo))),
-      editingSlug ? `Atualiza "${titulo}"` : `Adiciona "${titulo}"`,
-      editingFileSha
-    );
-
+    const slug = editingSlug || slugify(titulo)+'-'+Date.now();
+    const md = buildMD(fields);
+    showLoader('Publicando...');
+    await ghPutFile(`${col.pasta}/${slug}.md`, btoa(unescape(encodeURIComponent(md))), editingSlug?`Atualiza "${titulo}"`:`Adiciona "${titulo}"`, editingSha);
     hideLoader();
-    showToast(`"${titulo}" salva com sucesso ✓`);
+    showToast(`"${titulo}" salva ✓`);
     await carregarLista();
     voltarLista();
-  } catch(e) {
-    hideLoader();
-    showToast('Erro: ' + e.message, 'error');
-    console.error(e);
-  }
+  } catch(e) { hideLoader(); showToast('Erro: '+e.message,'err'); console.error(e); }
 }
 
 // ============================================================
 // DELETE
 // ============================================================
-function confirmarDeleteDireto(slug) {
-  const peca = currentPecas.find(p => p.slug === slug);
-  if (!peca) return;
-  mostrarDialog(
-    'Excluir peça?',
-    `"${peca.titulo || slug}" será removida permanentemente.`,
-    () => deletarPecaDireta(peca)
-  );
+function delDireto(slug) {
+  const p = currentPecas.find(x => x.slug === slug);
+  dialog('Excluir peça?', `"${p?.titulo||slug}" será removida.`, async () => {
+    fecharDialog(); showLoader('Excluindo...');
+    try { await ghDeleteFile(`${currentColecao.pasta}/${slug}.md`, p.sha, `Remove "${p?.titulo}"`); hideLoader(); showToast('Excluída'); await carregarLista(); }
+    catch(e){ hideLoader(); showToast('Erro: '+e.message,'err'); }
+  });
 }
 
 function confirmarDelete() {
-  mostrarDialog(
-    'Excluir esta peça?',
-    'Essa ação não pode ser desfeita.',
-    () => deletarPecaAtual()
-  );
+  if (!editingSlug) return;
+  const p = currentPecas.find(x => x.slug === editingSlug);
+  dialog('Excluir peça?', 'Esta ação não pode ser desfeita.', async () => {
+    fecharDialog(); showLoader('Excluindo...');
+    try { await ghDeleteFile(`${currentColecao.pasta}/${editingSlug}.md`, editingSha, `Remove "${p?.titulo}"`); hideLoader(); showToast('Excluída'); await carregarLista(); voltarLista(); }
+    catch(e){ hideLoader(); showToast('Erro: '+e.message,'err'); }
+  });
 }
 
-async function deletarPecaDireta(peca) {
-  fecharDialog();
-  showLoader('Excluindo...');
-  try {
-    await ghDeleteFile(`${currentColecao.pasta}/${peca.slug}.md`, peca.sha, `Remove "${peca.titulo}"`);
-    hideLoader();
-    showToast('Peça excluída');
-    await carregarLista();
-  } catch(e) {
-    hideLoader();
-    showToast('Erro: ' + e.message, 'error');
-  }
-}
-
-async function deletarPecaAtual() {
-  fecharDialog();
-  if (!editingSlug || !editingFileSha) return;
-  showLoader('Excluindo...');
-  try {
-    const peca = currentPecas.find(p => p.slug === editingSlug);
-    await ghDeleteFile(`${currentColecao.pasta}/${editingSlug}.md`, editingFileSha, `Remove "${peca?.titulo || editingSlug}"`);
-    hideLoader();
-    showToast('Peça excluída');
-    await carregarLista();
-    voltarLista();
-  } catch(e) {
-    hideLoader();
-    showToast('Erro: ' + e.message, 'error');
-  }
+function confirmarLogout() {
+  dialog('Sair do admin?','Você precisará fazer login novamente.',()=>{fecharDialog();netlifyIdentity.logout();});
 }
 
 // ============================================================
 // FOTO
 // ============================================================
 function selecionarFoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-
-  if (file.size > 8 * 1024 * 1024) {
-    showToast('Foto muito grande (máx 8MB)', 'error');
-    return;
-  }
-
-  // Redimensiona antes de enviar
+  const file = input.files[0]; if(!file) return;
+  if(file.size > 10*1024*1024){showToast('Foto muito grande (máx 10MB)','err');return;}
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = e => {
     const img = new Image();
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let w = img.width, h = img.height;
-      const MAX = 1600;
-      if (w > MAX || h > MAX) {
-        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-        else { w = Math.round(w * MAX / h); h = MAX; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-      novaFotoBase64 = dataUrl.split(',')[1];
-      novaFotoNome = file.name.replace(/\.[^.]+$/, '.jpg');
+      const c = document.createElement('canvas');
+      let w=img.width,h=img.height,M=1800;
+      if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}
+      c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+      const dataUrl=c.toDataURL('image/jpeg',.88);
+      novaFotoB64=dataUrl.split(',')[1];
+      novaFotoNome=file.name.replace(/\.[^.]+$/,'.jpg');
+      const prev=document.getElementById('foto-preview');
+      prev.src=dataUrl;prev.style.display='block';
+      document.getElementById('foto-box').classList.add('has-img');
+    };img.src=e.target.result;
+  };reader.readAsDataURL(file);
+}
 
-      const preview = document.getElementById('foto-preview');
-      preview.src = dataUrl;
-      preview.style.display = 'block';
-      document.getElementById('foto-upload').classList.add('has-img');
-    };
-    img.src = e.target.result;
+// ============================================================
+// GITHUB API — usando token do Netlify Identity + git-gateway
+// ============================================================
+async function ghToken() {
+  if (!currentUser) throw new Error('Não autenticado');
+  // Tenta usar git-gateway do Netlify
+  try {
+    const r = await fetch('/.netlify/git/github', {
+      method:'POST',
+      headers:{'Authorization':`Bearer ${currentUser.token.access_token}`,'Content-Type':'application/json'},
+      body:JSON.stringify({})
+    });
+    if (r.ok) {
+      const d = await r.json();
+      if (d.access_token) return {token: d.access_token, useGateway: false};
+    }
+  } catch {}
+  // Fallback: usa git-gateway proxy
+  return {token: currentUser.token.access_token, useGateway: true};
+}
+
+async function ghFetch(method, path, body) {
+  const {token, useGateway} = await ghToken();
+  const base = useGateway
+    ? `/.netlify/git/github/repos/${ghOwner}/${ghRepo}/contents/${path}`
+    : `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept':'application/vnd.github.v3+json',
+    'Content-Type':'application/json',
   };
-  reader.readAsDataURL(file);
-}
-
-function resetFoto() {
-  const preview = document.getElementById('foto-preview');
-  preview.src = '';
-  preview.style.display = 'none';
-  document.getElementById('foto-upload').classList.remove('has-img');
-  document.getElementById('foto-input').value = '';
-  novaFotoBase64 = null;
-  novaFotoNome = null;
-}
-
-// ============================================================
-// TOGGLES
-// ============================================================
-function toggleRow(id) {
-  const row = document.getElementById(id);
-  row.classList.toggle('on');
-  if (id === 'toggle-destaque') {
-    document.getElementById('field-ordem').style.display = row.classList.contains('on') ? '' : 'none';
-  }
-}
-
-function setToggle(id, value) {
-  const row = document.getElementById(id);
-  if (value) row.classList.add('on');
-  else row.classList.remove('on');
-}
-
-function isToggleOn(id) {
-  return document.getElementById(id).classList.contains('on');
-}
-
-// ============================================================
-// NAVEGAÇÃO
-// ============================================================
-function mostrarTela(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function voltarHome() { mostrarHome(); }
-function voltarLista() { mostrarTela('screen-list'); }
-
-// ============================================================
-// GITHUB API
-// ============================================================
-const GITHUB_API = 'https://api.github.com';
-
-async function ghRequest(method, path, body) {
-  const res = await fetch(`${GITHUB_API}/repos/${CFG.owner}/${CFG.repo}/contents/${path}`, {
-    method,
-    headers: {
-      'Authorization': `Bearer ${CFG.token}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json',
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
+  const res = await fetch(base, {method, headers, body: body?JSON.stringify(body):undefined});
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `HTTP ${res.status}`);
+    const e = await res.json().catch(()=>({}));
+    throw new Error(e.message||`HTTP ${res.status}`);
   }
-
-  return res.status === 204 ? null : res.json();
+  return res.status===204?null:res.json();
 }
 
 async function ghGetFile(path) {
-  const data = await ghRequest('GET', path);
-  return {
-    sha: data.sha,
-    decoded: decodeURIComponent(escape(atob(data.content.replace(/\n/g, '')))),
-  };
+  const d = await ghFetch('GET', path);
+  return {sha:d.sha, decoded:decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))))};
 }
 
 async function ghListFiles(folder) {
-  const res = await fetch(`${GITHUB_API}/repos/${CFG.owner}/${CFG.repo}/contents/${folder}`, {
-    headers: {
-      'Authorization': `Bearer ${CFG.token}`,
-      'Accept': 'application/vnd.github.v3+json',
-    }
-  });
-  if (res.status === 404) return [];
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `HTTP ${res.status}`);
-  }
+  const {token, useGateway} = await ghToken();
+  const base = useGateway
+    ? `/.netlify/git/github/repos/${ghOwner}/${ghRepo}/contents/${folder}`
+    : `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${folder}`;
+  const res = await fetch(base, {headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json'}});
+  if (res.status===404) return [];
+  if (!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||`HTTP ${res.status}`);}
   return res.json();
 }
 
-async function ghPutFile(path, base64content, message, sha) {
-  const body = { message, content: base64content };
-  if (sha) body.sha = sha;
-  return ghRequest('PUT', path, body);
+async function ghPutFile(path, b64, msg, sha) {
+  const body={message:msg,content:b64};
+  if(sha)body.sha=sha;
+  return ghFetch('PUT',path,body);
 }
 
-async function ghDeleteFile(path, sha, message) {
-  const res = await fetch(`${GITHUB_API}/repos/${CFG.owner}/${CFG.repo}/contents/${path}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${CFG.token}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ message, sha }),
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `HTTP ${res.status}`);
-  }
+async function ghDeleteFile(path, sha, msg) {
+  const {token, useGateway} = await ghToken();
+  const base = useGateway
+    ? `/.netlify/git/github/repos/${ghOwner}/${ghRepo}/contents/${path}`
+    : `https://api.github.com/repos/${ghOwner}/${ghRepo}/contents/${path}`;
+  const res = await fetch(base,{method:'DELETE',headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:msg,sha})});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||`HTTP ${res.status}`);}
 }
 
 // ============================================================
 // UTILS
 // ============================================================
-function parseFrontmatter(text) {
-  const m = text.match(/^---\s*\n([\s\S]*?)\n---/);
-  if (!m) return {};
-  const obj = {};
-  m[1].split('\n').forEach(line => {
-    const r = line.match(/^([a-zA-Z_]+):\s*(.*)$/);
-    if (!r) return;
-    let v = r[2].trim();
-    if ((v.startsWith('"')&&v.endsWith('"'))||(v.startsWith("'")&&v.endsWith("'"))) v=v.slice(1,-1);
-    if (v==='true') v=true; else if(v==='false') v=false;
-    else if(v==='null'||v==='') v=null;
-    else if(/^-?\d+\.?\d*$/.test(v)) v=parseFloat(v);
-    obj[r[1]] = v;
+function parseFM(t) {
+  const m=t.match(/^---\s*\n([\s\S]*?)\n---/);if(!m)return{};
+  const o={};
+  m[1].split('\n').forEach(l=>{
+    const r=l.match(/^([a-zA-Z_]+):\s*(.*)$/);if(!r)return;
+    let v=r[2].trim();
+    if((v.startsWith('"')&&v.endsWith('"'))||(v.startsWith("'")&&v.endsWith("'")))v=v.slice(1,-1);
+    if(v==='true')v=true;else if(v==='false')v=false;else if(v==='null'||v==='')v=null;else if(/^-?\d+\.?\d*$/.test(v))v=parseFloat(v);
+    o[r[1]]=v;
+  });return o;
+}
+
+function buildMD(fields) {
+  const l=['---'];
+  Object.entries(fields).forEach(([k,v])=>{
+    if(v===null||v===undefined){l.push(`${k}: null`);return;}
+    if(typeof v==='boolean'){l.push(`${k}: ${v}`);return;}
+    if(typeof v==='number'){l.push(`${k}: ${v}`);return;}
+    const s=String(v);
+    l.push(s.includes('"')||s.includes('\n')||s.includes(':') ? `${k}: '${s.replace(/'/g,"''")}'` : `${k}: "${s}"`);
   });
-  return obj;
+  l.push('---');return l.join('\n')+'\n';
 }
 
-function buildMarkdown(fields) {
-  const lines = ['---'];
-  Object.entries(fields).forEach(([k, v]) => {
-    if (v === null || v === undefined) { lines.push(`${k}: null`); return; }
-    if (typeof v === 'boolean') { lines.push(`${k}: ${v}`); return; }
-    if (typeof v === 'number') { lines.push(`${k}: ${v}`); return; }
-    const s = String(v);
-    if (s.includes('"') || s.includes('\n') || s.includes(':')) {
-      lines.push(`${k}: '${s.replace(/'/g, "''")}'`);
-    } else {
-      lines.push(`${k}: "${s}"`);
-    }
-  });
-  lines.push('---');
-  return lines.join('\n') + '\n';
-}
-
-function slugify(s) {
-  return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);
-}
-
-function esc(s) {
-  if (!s) return '';
-  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
+function slugify(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);}
+function esc(s){if(!s)return'';return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 
 // ============================================================
-// TOAST
+// TOGGLES
 // ============================================================
-let toastTimer;
-function showToast(msg, type='') {
-  const el = document.getElementById('toast');
-  const icon = type === 'error'
-    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>'
-    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>';
-  el.innerHTML = icon + msg;
-  el.className = 'toast' + (type ? ' ' + type : '') + ' show';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+function toggleRow(id){
+  const r=document.getElementById(id);r.classList.toggle('on');
+  if(id==='toggle-destaque') document.getElementById('field-ordem').style.display=r.classList.contains('on')?'':'none';
 }
+function setOn(id,v){const r=document.getElementById(id);v?r.classList.add('on'):r.classList.remove('on');}
+function isOn(id){return document.getElementById(id).classList.contains('on');}
 
 // ============================================================
-// LOADER
+// NAVEGAÇÃO
 // ============================================================
-function showLoader(msg) {
-  document.getElementById('loader-msg').textContent = msg || 'Aguarde...';
-  document.getElementById('loader').style.display = 'flex';
-}
-function hideLoader() {
-  document.getElementById('loader').style.display = 'none';
-}
+function mostrarTela(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function voltarHome(){mostrarTela('screen-home');}
+function voltarLista(){mostrarTela('screen-list');}
 
 // ============================================================
-// DIALOG
+// UI — TOAST, LOADER, DIALOG
 // ============================================================
-let dialogCallback = null;
-function mostrarDialog(title, msg, onConfirm) {
-  document.getElementById('dialog-title').textContent = title;
-  document.getElementById('dialog-msg').textContent = msg;
-  document.getElementById('dialog-confirm').onclick = onConfirm;
-  document.getElementById('dialog').style.display = 'flex';
+let _tt;
+function showToast(msg,type=''){
+  const el=document.getElementById('toast');
+  const icon=type==='err'?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>`:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>`;
+  el.innerHTML=icon+msg;el.className='toast'+(type?' '+type:'')+' show';
+  clearTimeout(_tt);_tt=setTimeout(()=>el.classList.remove('show'),3500);
 }
-function fecharDialog() {
-  document.getElementById('dialog').style.display = 'none';
+function showLoader(msg){document.getElementById('loader-msg').textContent=msg||'Aguarde...';document.getElementById('loader').style.display='flex';}
+function hideLoader(){document.getElementById('loader').style.display='none';}
+function dialog(title,msg,onOk){
+  document.getElementById('d-title').textContent=title;
+  document.getElementById('d-msg').textContent=msg;
+  document.getElementById('d-confirm').onclick=onOk;
+  document.getElementById('dialog').style.display='flex';
 }
+function fecharDialog(){document.getElementById('dialog').style.display='none';}
 </script>
 </body>
 </html>
