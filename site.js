@@ -3,18 +3,18 @@
 // ============================================================
 
 const PECAS_INDEX = [
+  'abridor-ibex',
+  'bowl-familia',
+  'bowl-raizes',
+  'bowl-rustico',
   'cavalo-solitario',
   'crina-ao-vento',
-  'ibex-aguas',
   'elm-ibex-001',
-  'xadrez-turquesa',
-  'travessa-onda',
-  'bowl-raizes',
-  'bowl-familia',
-  'bowl-rustico',
-  'travessa-lua',
+  'ibex-aguas',
   'tabua-charcuterie',
-  'abridor-ibex',
+  'travessa-lua',
+  'travessa-onda',
+  'xadrez-turquesa',
 ];
 
 const JATAMALA_INDEX = []; // Preenchido pelo admin conforme novas peças forem criadas
