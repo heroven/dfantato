@@ -258,37 +258,27 @@ textarea.fld-inp{min-height:84px;resize:none;line-height:1.55}
 <div class="login-box">
   <img class="login-logo" src="/images/logo-gold.png" alt="D'Fantato"/>
   <h1 class="login-h">Painel Admin</h1>
-  <p class="login-sub">Entre com seu token do GitHub para acessar o painel de gerenciamento.</p>
+  <p class="login-sub">Digite seu token e a senha para acessar o painel.</p>
 
   <div class="login-form">
-    <div class="login-err" id="login-err">Token inválido ou sem permissão. Verifique e tente novamente.</div>
+    <div class="login-err" id="login-err">Credenciais inválidas. Verifique e tente novamente.</div>
 
     <div class="fld">
-      <label class="fld-lbl">Personal Access Token do GitHub</label>
+      <label class="fld-lbl">Token de Acesso (GitHub)</label>
       <input class="fld-inp" id="inp-token" type="password"
         placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
         autocomplete="current-password"
         autocapitalize="none" autocorrect="off" spellcheck="false"/>
       <div class="fld-hint">
-        Gere em: <strong>github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</strong><br/>
-        Marque a permissão <strong>repo</strong>.
+        Não tem um token? <a href="https://github.com/settings/tokens/new?scopes=repo&description=DFantato+Admin" target="_blank" style="color:var(--gold)">Clique aqui para gerar →</a>
       </div>
     </div>
 
-    <div class="login-sep">e</div>
-
     <div class="fld">
-      <label class="fld-lbl">Usuário GitHub</label>
-      <input class="fld-inp" id="inp-owner" type="text"
-        placeholder="ex: gabrielfantato1"
-        autocapitalize="none" autocorrect="off" spellcheck="false"/>
-    </div>
-
-    <div class="fld">
-      <label class="fld-lbl">Nome do Repositório</label>
-      <input class="fld-inp" id="inp-repo" type="text"
-        placeholder="ex: dfantato-wood"
-        autocapitalize="none" autocorrect="off" spellcheck="false"/>
+      <label class="fld-lbl">Senha do Painel</label>
+      <input class="fld-inp" id="inp-senha" type="password"
+        placeholder="Senha definida nas configurações"
+        autocomplete="current-password"/>
     </div>
 
     <button class="btn btn-gold" id="btn-login" onclick="fazerLogin()">
@@ -297,8 +287,7 @@ textarea.fld-inp{min-height:84px;resize:none;line-height:1.55}
     </button>
 
     <p class="login-help">
-      Suas credenciais ficam salvas <strong>apenas neste aparelho</strong>.<br/>
-      <a href="https://github.com/settings/tokens/new?scopes=repo&description=DFantato+Admin" target="_blank">Clique aqui para gerar o token →</a>
+      Credenciais salvas <strong>apenas neste aparelho</strong>.
     </p>
   </div>
 </div>
@@ -444,25 +433,28 @@ textarea.fld-inp{min-height:84px;resize:none;line-height:1.55}
     </button>
 
     <!-- ACESSO -->
-    <div class="sec-lbl" style="margin-top:36px">Acesso GitHub</div>
+    <div class="sec-lbl" style="margin-top:36px">Acesso Técnico</div>
+    <p style="font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:16px">
+      Usuário e repositório são definidos no código do admin.<br/>
+      Aqui você pode ver qual token está ativo e trocar se necessário.
+    </p>
     <div class="fld">
-      <label class="fld-lbl">Personal Access Token</label>
+      <label class="fld-lbl">Repositório atual</label>
+      <input class="fld-inp" id="c-repo-info" type="text" readonly
+        style="opacity:.6;cursor:default"/>
+    </div>
+    <div class="fld">
+      <label class="fld-lbl">Novo Token (deixe vazio para manter)</label>
       <input class="fld-inp" id="c-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx"
         autocapitalize="none" autocorrect="off" spellcheck="false"/>
-      <div class="fld-hint">Deixe em branco para manter o token atual.</div>
-    </div>
-    <div class="fld">
-      <label class="fld-lbl">Usuário GitHub</label>
-      <input class="fld-inp" id="c-owner" type="text" autocapitalize="none" autocorrect="off"/>
-    </div>
-    <div class="fld">
-      <label class="fld-lbl">Repositório</label>
-      <input class="fld-inp" id="c-repo" type="text" autocapitalize="none" autocorrect="off"/>
+      <div class="fld-hint">
+        <a href="https://github.com/settings/tokens/new?scopes=repo&description=DFantato+Admin" target="_blank" style="color:var(--gold)">Gerar novo token →</a>
+      </div>
     </div>
 
     <button class="btn btn-ghost" onclick="salvarAcesso()" style="margin-top:8px">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/></svg>
-      Atualizar Acesso
+      Atualizar Token
     </button>
 
     <!-- SAIR -->
@@ -494,6 +486,14 @@ textarea.fld-inp{min-height:84px;resize:none;line-height:1.55}
 ═══════════════════════════════════════════════════════ -->
 <script>
 'use strict';
+
+/* ────────────────────────────────────────────────────────────
+   CONFIGURAÇÃO — EDITE AQUI
+   Após alterar, sube o arquivo admin/index.html no GitHub.
+──────────────────────────────────────────────────────────── */
+const ADMIN_OWNER = 'gabrielfantato1';  // não aparece na tela de login
+const ADMIN_REPO  = 'dfantato-wood';    // não aparece na tela de login
+const ADMIN_SENHA = 'fantato2024';      // ← troque pela sua senha
 
 /* ────────────────────────────────────────────────────────────
    COLEÇÕES
@@ -557,16 +557,12 @@ let fotoExt  = 'jpg';
 ──────────────────────────────────────────────────────────── */
 (function init() {
   const saved = ls('df_st');
-  if (saved && saved.token && saved.owner && saved.repo) {
-    ST = saved;
+  if (saved && saved.token) {
+    // Sempre usa owner/repo das constantes (ignora o que está salvo)
+    ST = { token: saved.token, owner: ADMIN_OWNER, repo: ADMIN_REPO };
     preencherHome();
     ir('s-home');
   } else {
-    // Preenche os campos se tiver parcialmente salvo
-    if (saved) {
-      id('inp-owner').value = saved.owner || '';
-      id('inp-repo').value  = saved.repo  || '';
-    }
     ir('s-login');
   }
 })();
@@ -576,30 +572,37 @@ let fotoExt  = 'jpg';
 ──────────────────────────────────────────────────────────── */
 async function fazerLogin() {
   const token = id('inp-token').value.trim();
-  const owner = id('inp-owner').value.trim();
-  const repo  = id('inp-repo').value.trim();
+  const senha = id('inp-senha').value;
 
   id('login-err').classList.remove('on');
 
   if (!token) { mostrarErroCampo('inp-token', 'Digite o token'); return; }
-  if (!owner) { mostrarErroCampo('inp-owner', 'Digite o usuário'); return; }
-  if (!repo)  { mostrarErroCampo('inp-repo',  'Digite o repositório'); return; }
+  if (!senha) { mostrarErroCampo('inp-senha', 'Digite a senha'); return; }
 
-  loader('Verificando acesso...');
+  // Verifica senha primeiro (sem chamada de rede)
+  if (senha !== ADMIN_SENHA) {
+    hideLoader();
+    id('login-err').textContent = 'Senha incorreta.';
+    id('login-err').classList.add('on');
+    id('inp-senha').value = '';
+    id('inp-senha').focus();
+    return;
+  }
+
+  loader('Verificando token...');
   try {
-    // Verifica se o token tem acesso ao repo
-    const r = await ghFetch('GET', `https://api.github.com/repos/${owner}/${repo}`, null, token);
+    const r = await ghFetch('GET', `https://api.github.com/repos/${ADMIN_OWNER}/${ADMIN_REPO}`, null, token);
     if (!r.ok) {
       hideLoader();
       id('login-err').textContent = r.status === 401
         ? 'Token inválido. Verifique se copiou corretamente.'
         : r.status === 404
-        ? 'Repositório não encontrado. Verifique o usuário e nome do repo.'
-        : `Erro ${r.status}. Verifique suas credenciais.`;
+        ? 'Repositório não encontrado. Verifique as configurações.'
+        : `Erro ${r.status}. Verifique seu token.`;
       id('login-err').classList.add('on');
       return;
     }
-    ST = { token, owner, repo };
+    ST = { token, owner: ADMIN_OWNER, repo: ADMIN_REPO };
     ls('df_st', ST);
     hideLoader();
     preencherHome();
@@ -612,7 +615,7 @@ async function fazerLogin() {
 }
 
 // Permite Enter nos campos de login
-['inp-token','inp-owner','inp-repo'].forEach(fid => {
+['inp-token','inp-senha'].forEach(fid => {
   id(fid).addEventListener('keydown', e => { if (e.key === 'Enter') fazerLogin(); });
 });
 
@@ -624,11 +627,12 @@ function mostrarErroCampo(fid, msg) {
 }
 
 function confirmarSair() {
-  dlg('Sair do admin?', 'Você precisará inserir o token novamente.', () => {
+  dlg('Sair do admin?', 'Você precisará inserir o token e a senha novamente.', () => {
     dlgFechar();
     ls('df_st', null);
-    ST = { token: '', owner: '', repo: '' };
+    ST = { token: '', owner: ADMIN_OWNER, repo: ADMIN_REPO };
     id('inp-token').value = '';
+    id('inp-senha').value = '';
     ir('s-login');
   });
 }
@@ -1029,9 +1033,8 @@ function onFoto(input) {
    CONFIGURAÇÕES DO SITE
 ──────────────────────────────────────────────────────────── */
 async function abrirCfg() {
-  // Preenche campos de acesso
-  id('c-owner').value = ST.owner;
-  id('c-repo').value  = ST.repo;
+  // Mostra info do repo
+  id('c-repo-info').value = `${ADMIN_OWNER}/${ADMIN_REPO}`;
   id('c-token').value = '';
 
   // Carrega site.yml
@@ -1088,30 +1091,25 @@ async function salvarSiteConfig() {
 }
 
 async function salvarAcesso() {
-  const owner = id('c-owner').value.trim();
-  const repo  = id('c-repo').value.trim();
-  const token = id('c-token').value.trim();
-
-  if (!owner || !repo) {
-    toast('Usuário e repositório são obrigatórios', 'err');
+  const novoToken = id('c-token').value.trim();
+  if (!novoToken) {
+    toast('Digite o novo token', 'err');
+    id('c-token').focus();
     return;
   }
 
-  const novoToken = token || ST.token;
-
-  loader('Verificando novo acesso...');
+  loader('Verificando token...');
   try {
-    const r = await ghFetch('GET', `https://api.github.com/repos/${owner}/${repo}`, null, novoToken);
+    const r = await ghFetch('GET', `https://api.github.com/repos/${ADMIN_OWNER}/${ADMIN_REPO}`, null, novoToken);
     if (!r.ok) {
       hideLoader();
-      toast(r.status === 401 ? 'Token inválido' : `Repositório não encontrado (${r.status})`, 'err');
+      toast(r.status === 401 ? 'Token inválido' : `Erro ${r.status}`, 'err');
       return;
     }
-    ST = { token: novoToken, owner, repo };
+    ST.token = novoToken;
     ls('df_st', ST);
-    preencherHome();
     hideLoader();
-    toast('Acesso atualizado ✓', 'ok');
+    toast('Token atualizado ✓', 'ok');
     id('c-token').value = '';
   } catch (e) {
     hideLoader();
